@@ -19,7 +19,7 @@ public:
     void shoot(const sf::Vector2f &origin, const sf::Vector2f &direction);
     void render_bullets();
     void move_bullets();
-    std::vector<Bullet*>* magazine_pointer();
+    bool got_hit(const sf::Sprite& b);
 private:
     void reload();
     void freeze();
@@ -30,8 +30,7 @@ private:
     int current_bullet_count;
     bool is_reloaded;
     bool is_able_to_shoot;
-    
-    sf::RenderWindow* window_to_render_on;
-    
     std::vector<Bullet*> magazine;
+
+    sf::RenderWindow* window_to_render_on;
 };

@@ -26,49 +26,44 @@ void Pistol::shoot(const sf::Vector2f &origin, const sf::Vector2f &direction)
     {
         magazine.push_back(new Bullet(origin, direction));
         
-        //std::thread bullet_draw
-        
         current_bullet_count--;
-        //std::thread t;
         if (current_bullet_count == 0)
         {
-            //t = std::thread(&Pistol::reload, Pistol());
             current_bullet_count = max_capacity;
         }
-        else
-        {
-            //t = std::thread(&Pistol::freeze, Pistol());
-        }
-        
-        //t.join();
     }
 }
 
 void Pistol::render_bullets()
 {
-    if (!magazine.empty())
+    for (auto it : magazine)
     {
-        for (auto it : magazine)
-        {
-            window_to_render_on->draw(it->get_bullet_sprite());
-        }
+        window_to_render_on->draw(it->get_bullet_sprite());
     }
 }
 
 void Pistol::move_bullets()
 {
-    if (!magazine.empty())
-    {
-        for (int i = 0; i < magazine.size(); i++)
-        {
-            magazine[i]->move(window_to_render_on, magazine, i);
-        }
-    }
+   for (int i = 0; i < magazine.size(); i++)
+   {
+        magazine[i]->move(window_to_render_on, magazine, i);
+   }
 }
 
-std::vector<Bullet*>* Pistol::magazine_pointer()
+bool Pistol::got_hit(const sf::Sprite &b)
 {
-    return &magazine;
+    for (int i = 0; i < magazine.size(); i++)
+    {
+        if (util::is_colliding(magazine[i]->get_bullet_sprite(), b))
+        {
+            delete magazine.at(i);
+            magazine.erase(magazine.begin() + i);
+            
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Pistol::reload()

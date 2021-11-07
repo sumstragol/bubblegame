@@ -56,7 +56,6 @@ void Game::poll_events()
                                  (sf::Vector2f)sf::Mouse::getPosition(*window)
                                  );
                 }
-                
             default:
                 break;
         }
@@ -82,12 +81,13 @@ void Game::update()
         }
     }
     
-    int g = 0;
-    int h = 0;
-    
-    if (util::is_colliding(&balls, p_gun->magazine_pointer(), g, h))
+    for (int i = 0; i < balls.size(); i++)
     {
-        balls.at(g)->double_ball(balls, g);
+        if (p_gun->got_hit(balls[i]->get_ball_sprite()))
+        {
+            balls[i]->double_ball(balls, i);
+            break;
+        }
     }
 }
 

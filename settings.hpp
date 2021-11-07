@@ -18,12 +18,12 @@ namespace settings
     const int SCREEN_HEIGHT = 1200;
     const unsigned int FPS = 60;
     //player
-    const std::string PLAYER_STAND_TEX_PATH = "/Users/mikolajbrozek/xcode projects/sfmll/sfmll/sfmll/textures/player_stand.png";
-    const std::string PLAYER_MOVE_1_TEX_PATH = "/Users/mikolajbrozek/xcode projects/sfmll/sfmll/sfmll/textures/player_move_1.png";
-    const std::string PLAYER_MOVE_2_TEX_PATH = "/Users/mikolajbrozek/xcode projects/sfmll/sfmll/sfmll/textures/player_move_2.png";
+    const std::string PLAYER_STAND_TEX_PATH = "textures/player_stand.png";
+    const std::string PLAYER_MOVE_1_TEX_PATH = "textures/player_move_1.png";
+    const std::string PLAYER_MOVE_2_TEX_PATH = "textures/player_move_2.png";
     const float PLAYER_SPEED = 20.f;
     //ball
-    const std::string BALL_TEX_PATH = "/Users/mikolajbrozek/xcode projects/sfmll/sfmll/sfmll/textures/ball.png";
+    const std::string BALL_TEX_PATH = "textures/ball.png";
     const float BALL_SCALE_LARGE = 3.f;
     const float BALL_SCALE_MEDIUM = 2.f;
     const float BALL_SCALE_SMALL = 1.f;
@@ -37,7 +37,7 @@ namespace settings
     const float BALL_MAX_GRAVITY_MEDIUM = 25.f;
     const float BALL_MAX_GRAVITY_SMALL = 20.f;
     //bullet
-    const std::string BULLET_TEX_PATH = "/Users/mikolajbrozek/xcode projects/sfmll/sfmll/sfmll/textures/ball.png";
+    const std::string BULLET_TEX_PATH = "textures/ball.png";
     const float BULLET_SPEED_LOW = 30.f;
     //pistol
     const unsigned int PISTOL_MAX_CAPACITY = 5;
