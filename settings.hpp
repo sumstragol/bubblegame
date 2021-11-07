@@ -36,4 +36,11 @@ namespace settings
     const float BALL_MAX_GRAVITY_LARGE = 30.f;
     const float BALL_MAX_GRAVITY_MEDIUM = 25.f;
     const float BALL_MAX_GRAVITY_SMALL = 20.f;
+    //bullet
+    const std::string BULLET_TEX_PATH = "/Users/mikolajbrozek/xcode projects/sfmll/sfmll/sfmll/textures/ball.png";
+    const float BULLET_SPEED_LOW = 30.f;
+    //pistol
+    const unsigned int PISTOL_MAX_CAPACITY = 5;
+    const unsigned int PISTOL_RELOAD_TIME = 3000;
+    const unsigned int PISTOL_FREEZE_TIME_BETWEEN_SHOTS = 1000;
 }

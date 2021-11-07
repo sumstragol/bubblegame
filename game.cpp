@@ -14,14 +14,17 @@ Game::Game()
     window->setFramerateLimit(settings::FPS);
     window->clear();
     p = new Player();
+    p_gun = new Pistol(window);
     
-    balls.push_back(new Ball(Ball_size::large));
+    balls.push_back(new Ball_large());
 }
 
 const bool Game::is_running() const
 {
     return window->isOpen();
 }
+
+// chgane the logic - thread waiting for event to happen instead of cheking it in a while loop
 
 void Game::poll_events()
 {
@@ -43,9 +46,17 @@ void Game::poll_events()
                 }
                 else if (e.key.code == sf::Keyboard::T)
                 {
-                    Ball::double_ball(balls, 0);
+                    balls[0]->double_ball(balls, 0);
                 }
                 break;
+            case sf::Event::MouseButtonPressed:
+                if (e.mouseButton.button == sf::Mouse::Left)
+                {
+                    p_gun->shoot(p->get_player_sprite().getPosition(),
+                                 (sf::Vector2f)sf::Mouse::getPosition(*window)
+                                 );
+                }
+                
             default:
                 break;
         }
@@ -56,9 +67,27 @@ void Game::update()
 {
     poll_events();
     
-    for (auto it : balls)
+    for (auto &it : balls)
     {
         it->ball_dispalcement(window);
+    }
+    
+    p_gun->move_bullets();
+    
+    for (auto &it : balls)
+    {
+        if (util::is_colliding(it->get_ball_sprite(), p->get_player_sprite()))
+        {
+            //
+        }
+    }
+    
+    int g = 0;
+    int h = 0;
+    
+    if (util::is_colliding(&balls, p_gun->magazine_pointer(), g, h))
+    {
+        balls.at(g)->double_ball(balls, g);
     }
 }
 
@@ -68,11 +97,12 @@ void Game::render()
     
     window->draw(p->get_player_sprite());
     
+    p_gun->render_bullets();
+    
     for (auto it : balls)
     {
         window->draw(it->get_ball_sprite());
     }
-    
     
     window->display();
 }

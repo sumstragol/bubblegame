@@ -8,6 +8,11 @@
 #pragma once
 
 #include <vector>
+#include <thread>
+#include <chrono>
+#include <future>
+#include <mutex>
+
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -16,12 +21,15 @@
 #include "settings.hpp"
 #include "util.hpp"
 #include "player.hpp"
+#include "bullet.hpp"
+#include "pistol.hpp"
 #include "ball.hpp"
 
 class Player;
+class Bullet;
+class Pistol;
 class Ball;
 
-enum class Ball_size;
 enum class Move_direction
 {
     left, right
@@ -42,5 +50,6 @@ private:
     sf::Event e;
     
     Player* p;
+    Pistol* p_gun;
     std::vector<Ball*> balls;
 };
