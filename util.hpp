@@ -1,16 +1,6 @@
-//
-//  util.hpp
-//  sfmll
-//
-//  Created by Mikolaj Brozek on 01/11/2021.
-//  Copyright © 2021 Mikolaj Brozek. All rights reserved.
-//
 #pragma once
 
-#include "game.hpp"
-
-class Bullet;
-class Ball;
+#include "includes.hpp"
 
 namespace util {
     // texture related functions

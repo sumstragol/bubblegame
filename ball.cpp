@@ -1,181 +1,115 @@
-//
-//  ball.cpp
-//  sfmll
-//
-//  Created by Mikolaj Brozek on 01/11/2021.
-//  Copyright © 2021 Mikolaj Brozek. All rights reserved.
-//
 #include "ball.hpp"
 
-/*
- 
-    Base class implementation
- 
- */
-
 Ball::Ball()
-:ball_tex(util::get_tex(settings::BALL_TEX_PATH)),
-    speed_x(settings::BALL_HORIZONTAL_SPEED),
-    speed_y(settings::BALL_VERTICAL_SPEED),
-    gravity(settings::BALL_GRAVITY),
-    after_create(true)
+	:gravity(settings::BALL_GRAVITY),
+	after_create(true)
 {
-    ball.setTexture(ball_tex);
+	set_tex(settings::BALL_TEX_PATH);
+    attach_tex();
+
+	set_speed_x(settings::BALL_HORIZONTAL_SPEED);
+	set_speed_y(settings::BALL_VERTICAL_SPEED);
 }
 
 Ball::Ball(const Ball* b)
-:ball_tex(b->get_ball_tex()),
-    speed_x(b->get_speed_x()),
-    speed_y(b->get_speed_y()),
-    gravity(settings::BALL_GRAVITY),
-    after_create(true)
+	:gravity(b->gravity),
+	after_create(true)
 {
-    ball.setTexture(ball_tex);
-    ball.setPosition(b->get_pos_x(), b->get_pos_y());
+    set_tex(settings::BALL_TEX_PATH);
+    attach_tex();
+
+    set_pos_x(b->get_pos_x());
+    set_pos_y(b->get_pos_y());
+
+	set_speed_x(b->get_speed_x());
+	set_speed_y(b->get_speed_y());
 }
 
 Ball::~Ball() = default;
 
-const sf::Sprite Ball::get_ball_sprite() const
+void Ball::move(sf::RenderWindow* window)
 {
-    return ball;
-}
-
-const sf::Texture Ball::get_ball_tex() const
-{
-    return ball_tex;
-}
-
-float Ball::get_speed_x() const
-{
-    return speed_x;
-}
-
-void Ball::reverse_x()
-{
-    speed_x *= -1;
-}
-
-float Ball::get_speed_y() const
-{
-    return speed_y;
-}
-
-const float Ball::get_pos_x() const
-{
-    return get_ball_sprite().getPosition().x;
-}
-
-const float Ball::get_pos_y() const
-{
-    return get_ball_sprite().getPosition().y;
-}
-
-void Ball::ball_dispalcement(sf::RenderWindow* window)
-{
-    //
-    //
-    //
-    // y axis
-    //
-    //
-    //
-    speed_y += gravity;
-    ball.move(speed_x, speed_y);
-    if (ball.getPosition().y + ball.getGlobalBounds().height + 0.5f >= window->getSize().y)
+	speed_y += gravity;
+	sprite.move(speed_x, speed_y);
+    if (get_pos_y() + sprite.getGlobalBounds().height + 0.5f >= window->getSize().y)
     {
-        ball.setPosition(ball.getPosition().x,
-                            window->getSize().y - ball.getGlobalBounds().height
-                         );
-        
+        sprite.setPosition(get_pos_x(),
+            window->getSize().y - sprite.getGlobalBounds().height
+        );
+
         if (after_create)
         {
             speed_y = get_max_speed_y();
             after_create = false;
         }
-        
+
         speed_y = -speed_y - gravity;
     }
-    //
-    //
-    //
-    // x axis
-    //
-    //
-    //
-    if (ball.getPosition().x + ball.getGlobalBounds().width >= window->getSize().x ||
-            ball.getPosition().x <= 0
+
+    if (get_pos_x() + sprite.getGlobalBounds().width >= window->getSize().x ||
+        get_pos_x() <= 0
         )
     {
         speed_x = -speed_x;
     }
 }
 
-/*
- 
-    Derived classes implementation
- 
- */
-
-/*
- 
-    Ball_small
- 
- */
+void Ball::neg_speed_x()
+{
+    speed_x *= -1;
+}
 
 Ball_small::Ball_small()
-:Ball()
+    :Ball()
 {
-    ball.setColor(settings::BALL_COLOR_SMALL);
-    ball.setScale(settings::BALL_SCALE_SMALL, settings::BALL_SCALE_SMALL);
+    sprite.setColor(settings::BALL_COLOR_SMALL);
+    sprite.setScale(settings::BALL_SCALE_SMALL, settings::BALL_SCALE_SMALL);
 }
 
 Ball_small::Ball_small(const Ball* b)
-:Ball(b)
+    :Ball(b)
 {
-    ball.setColor(settings::BALL_COLOR_SMALL);
-    ball.setScale(settings::BALL_SCALE_SMALL, settings::BALL_SCALE_SMALL);
+    sprite.setColor(settings::BALL_COLOR_SMALL);
+    sprite.setScale(settings::BALL_SCALE_SMALL, settings::BALL_SCALE_SMALL);
 }
 
-void Ball_small::double_ball(std::vector<Ball*>& v, const int to_double_index)
+void Ball_small::double_ball(std::vector<Ball*> &vec)
 {
-    delete v.at(to_double_index);
-    v.erase(v.begin() + to_double_index);
+    int ball_index = std::find(vec.begin(), vec.end(), this) - vec.begin();
+    vec.erase(vec.begin() + ball_index);
+
+    delete this;
 }
 
 float Ball_small::get_max_speed_y() const
 {
-    return settings::BALL_MAX_GRAVITY_MEDIUM;
+    return settings::BALL_MAX_GRAVITY_SMALL;
 }
 
-/*
- 
-    Ball_medium
- 
- */
-
 Ball_medium::Ball_medium()
-:Ball()
+    :Ball()
 {
-    ball.setColor(settings::BALL_COLOR_MEDIUM);
-    ball.setScale(settings::BALL_SCALE_MEDIUM, settings::BALL_SCALE_MEDIUM);
+    sprite.setColor(settings::BALL_COLOR_MEDIUM);
+    sprite.setScale(settings::BALL_SCALE_MEDIUM, settings::BALL_SCALE_MEDIUM);
 }
 
 Ball_medium::Ball_medium(const Ball* b)
-:Ball(b)
+    :Ball(b)
 {
-    ball.setColor(settings::BALL_COLOR_MEDIUM);
-    ball.setScale(settings::BALL_SCALE_MEDIUM, settings::BALL_SCALE_MEDIUM);
+    sprite.setColor(settings::BALL_COLOR_MEDIUM);
+    sprite.setScale(settings::BALL_SCALE_MEDIUM, settings::BALL_SCALE_MEDIUM);
 }
 
-void Ball_medium::double_ball(std::vector<Ball*>& v, const int to_double_index)
+void Ball_medium::double_ball(std::vector<Ball*>& vec)
 {
-    v.push_back(new Ball_small(v.at(to_double_index)));
-    v.at(to_double_index)->reverse_x();
-    v.push_back(new Ball_small(v.at(to_double_index)));
+    int ball_index = std::find(vec.begin(), vec.end(), this) - vec.begin();
+    vec.erase(vec.begin() + ball_index);
+
+    vec.push_back(new Ball_small(this));
+    neg_speed_x();
+    vec.push_back(new Ball_small(this));
     
-    delete v.at(to_double_index);
-    v.erase(v.begin() + to_double_index);
+    delete this;
 }
 
 float Ball_medium::get_max_speed_y() const
@@ -183,35 +117,30 @@ float Ball_medium::get_max_speed_y() const
     return settings::BALL_MAX_GRAVITY_MEDIUM;
 }
 
-/*
- 
-    Ball_large
- 
- */
-
-
 Ball_large::Ball_large()
-:Ball()
+    :Ball()
 {
-    ball.setColor(settings::BALL_COLOR_LARGE);
-    ball.setScale(settings::BALL_SCALE_LARGE, settings::BALL_SCALE_LARGE);
+    sprite.setColor(settings::BALL_COLOR_LARGE);
+    sprite.setScale(settings::BALL_SCALE_LARGE, settings::BALL_SCALE_LARGE);
 }
 
 Ball_large::Ball_large(const Ball* b)
-:Ball(b)
+    :Ball(b)
 {
-    ball.setColor(settings::BALL_COLOR_LARGE);
-    ball.setScale(settings::BALL_SCALE_LARGE, settings::BALL_SCALE_LARGE);
+    sprite.setColor(settings::BALL_COLOR_LARGE);
+    sprite.setScale(settings::BALL_SCALE_LARGE, settings::BALL_SCALE_LARGE);
 }
 
-void Ball_large::double_ball(std::vector<Ball*>& v, const int to_double_index)
+void Ball_large::double_ball(std::vector<Ball*>& vec)
 {
-    v.push_back(new Ball_medium(v.at(to_double_index)));
-    v.at(to_double_index)->reverse_x();
-    v.push_back(new Ball_medium(v.at(to_double_index)));
-   
-    delete v.at(to_double_index);
-    v.erase(v.begin() + to_double_index);
+    int ball_index = std::find(vec.begin(), vec.end(), this) - vec.begin();
+    vec.erase(vec.begin() + ball_index);
+
+    vec.push_back(new Ball_medium(this));
+    neg_speed_x();
+    vec.push_back(new Ball_medium(this));
+
+    delete this;
 }
 
 float Ball_large::get_max_speed_y() const

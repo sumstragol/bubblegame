@@ -1,77 +1,42 @@
-//
-//  bullet.cpp
-//  sfmll
-//
-//  Created by Mikolaj Brozek on 06/11/2021.
-//  Copyright © 2021 Mikolaj Brozek. All rights reserved.
-//
-
 #include "bullet.hpp"
 
-Bullet::Bullet(sf::Vector2f origin, sf::Vector2f mouse_pos)
-:bullet_tex(util::get_tex(settings::BULLET_TEX_PATH)),
-    speed(settings::BULLET_SPEED_LOW)
+Bullet::Bullet(const Entity* origin, const sf::Vector2f& direction)
 {
-    bullet.setTexture(bullet_tex);
-    
-    bullet.setPosition(origin);
-    
-    util::direction_vector(direction, origin, mouse_pos);
-    util::normalize_vector(direction);
-    direction.x *= -speed;
-    direction.y *= -speed;
+	set_tex(settings::BALL_TEX_PATH);
+	attach_tex();
+
+	set_pos_x(origin->get_pos_x());
+	set_pos_y(origin->get_pos_y());
+
+	sf::Vector2f temp;
+	util::direction_vector(temp, origin->get_sprite().getPosition(), direction);
+	util::normalize_vector(temp);
+
+	set_speed_x(-temp.x * settings::BULLET_SPEED_LOW);
+	set_speed_y(-temp.y * settings::BULLET_SPEED_LOW);
 }
 
-Bullet::Bullet(sf::Vector2f origin, sf::Vector2f mouse_pos, const float &s)
-:bullet_tex(util::get_tex(settings::BULLET_TEX_PATH)),
-    speed(s)
-
+void Bullet::move(sf::RenderWindow* window, std::vector<Bullet*>& vec)
 {
-    bullet.setTexture(bullet_tex);
-    
-    bullet.setPosition(origin);
-    
-    util::direction_vector(direction, origin, mouse_pos);
-    util::normalize_vector(direction);
-    direction.x *= -speed;
-    direction.y *= -speed;
+	sprite.move(speed_x, speed_y);
+
+	if (get_pos_x() < -sprite.getGlobalBounds().width ||                        
+		get_pos_x() > window->getSize().x + sprite.getGlobalBounds().width ||  
+		get_pos_y() < -sprite.getGlobalBounds().height ||
+		get_pos_y() + sprite.getGlobalBounds().height > window->getSize().y + sprite.getGlobalBounds().height
+		)
+	{
+		int bullet_index = std::find(vec.begin(), vec.end(), this) - vec.begin();
+		vec.erase(vec.begin() + bullet_index);
+
+		delete this;
+	}
 }
 
-const sf::Sprite Bullet::get_bullet_sprite() const
+void Bullet::remove(std::vector<Bullet*>& vec)
 {
-    return bullet;
-}
+	int bullet_index = std::find(vec.begin(), vec.end(), this) - vec.begin();
+	vec.erase(vec.begin() + bullet_index);
 
-sf::Sprite Bullet::get_bullet_sprite()
-{
-    return bullet;
-}
-
-const float Bullet::get_pos_x() const
-{
-    return bullet.getPosition().x;
-}
-
-const float Bullet::get_pos_y() const
-{
-    return bullet.getPosition().y;
-}
-
-float Bullet::get_speed() const
-{
-    return speed;
-}
-
-void Bullet::move(sf::RenderWindow* window, std::vector<Bullet*> &v, const int bullet_index)
-{
-    bullet.move(direction);
-    
-    if (get_pos_x() < -bullet.getGlobalBounds().width ||                        //right border
-        get_pos_x() > window->getSize().x + bullet.getGlobalBounds().width ||   //left  border
-        get_pos_y() < -get_bullet_sprite().getGlobalBounds().height ||          //top   border
-        get_pos_y() + get_bullet_sprite().getGlobalBounds().height > window->getSize().y + bullet.getGlobalBounds().height
-        )
-    {
-        v.erase(v.begin() + bullet_index);
-    }
+	delete this;
 }

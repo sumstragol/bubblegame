@@ -1,14 +1,7 @@
-//
-//  settings.hpp
-//  sfmll
-//
-//  Created by Mikolaj Brozek on 01/11/2021.
-//  Copyright © 2021 Mikolaj Brozek. All rights reserved.
-//
-
 #pragma once
 
-#include <iostream>
+#include "includes.hpp"
+
 
 namespace settings
 {
