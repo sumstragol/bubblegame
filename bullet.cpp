@@ -1,15 +1,15 @@
 #include "bullet.hpp"
 
-Bullet::Bullet(const Entity* origin, const sf::Vector2f& direction)
+Bullet::Bullet(const sf::Vector2f& origin, const sf::Vector2f& direction)
 {
 	set_tex(settings::BALL_TEX_PATH);
 	attach_tex();
 
-	set_pos_x(origin->get_pos_x());
-	set_pos_y(origin->get_pos_y());
+	set_pos_x(origin.x);
+	set_pos_y(origin.y);
 
 	sf::Vector2f temp;
-	util::direction_vector(temp, origin->get_sprite().getPosition(), direction);
+	util::direction_vector(temp, origin, direction);
 	util::normalize_vector(temp);
 
 	set_speed_x(-temp.x * settings::BULLET_SPEED_LOW);

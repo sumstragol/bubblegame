@@ -4,6 +4,8 @@
 #include "ball.hpp"
 #include "player.hpp"
 #include "bullet.hpp"
+#include "scoreboard.hpp"
+#include "timer.hpp"
 
 enum class Move_direction;
 
@@ -23,4 +25,10 @@ private:
 	std::vector<Ball*> balls;
 	Player* p;
 	std::vector<Bullet*> bullets;
+    Scoreboard* sc;
+    Timer* timer;
+    
+    unsigned int points;
+    unsigned int lives;
+    
 };

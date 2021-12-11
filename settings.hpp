@@ -11,12 +11,12 @@ namespace settings
     const int SCREEN_HEIGHT = 1200;
     const unsigned int FPS = 60;
     //player
-    const std::string PLAYER_STAND_TEX_PATH = "textures/player_stand.png";
+    const std::string PLAYER_STAND_TEX_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/player_stand.png";
     const std::string PLAYER_MOVE_1_TEX_PATH = "textures/player_move_1.png";
     const std::string PLAYER_MOVE_2_TEX_PATH = "textures/player_move_2.png";
     const float PLAYER_SPEED = 20.f;
     //ball
-    const std::string BALL_TEX_PATH = "textures/ball.png";
+    const std::string BALL_TEX_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/ball.png";
     const float BALL_SCALE_LARGE = 3.f;
     const float BALL_SCALE_MEDIUM = 2.f;
     const float BALL_SCALE_SMALL = 1.f;
@@ -30,10 +30,17 @@ namespace settings
     const float BALL_MAX_GRAVITY_MEDIUM = 25.f;
     const float BALL_MAX_GRAVITY_SMALL = 20.f;
     //bullet
-    const std::string BULLET_TEX_PATH = "textures/ball.png";
+    const std::string BULLET_TEX_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/ball.png";
     const float BULLET_SPEED_LOW = 30.f;
     //pistol
     const unsigned int PISTOL_MAX_CAPACITY = 5;
     const unsigned int PISTOL_RELOAD_TIME = 3000;
     const unsigned int PISTOL_FREEZE_TIME_BETWEEN_SHOTS = 1000;
+    //scoreboard
+    const std::string SCOREBOARD_TEX_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/scoreboard.png";
+    const std::string FONT_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/uni0553-webfont.ttf";
+    const unsigned int FONT_SIZE = 40;
+    const sf::Color FONT_COLOR = sf::Color::Red;
+    //timer
+    const std::string TIMER_TEX_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/timer.png";
 }

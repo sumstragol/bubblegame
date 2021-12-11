@@ -1,6 +1,8 @@
 #include "game.hpp"
 
 Game::Game()
+    :points(0),
+    lives(1)
 {
     window = new sf::RenderWindow(sf::VideoMode(settings::SCREEN_WIDTH, settings::SCREEN_HEIGHT), settings::TITLE);
     window->setFramerateLimit(settings::FPS);
@@ -11,6 +13,11 @@ Game::Game()
     balls.push_back(b);
 
     p = new Player();
+    
+    sc = new Scoreboard();
+    sc->update_lives(std::to_string(lives));
+    
+    timer = new Timer(0.8f);
 }
 
 void Game::run()
@@ -38,7 +45,7 @@ void Game::poll_events()
             window->close();
             break;
         case sf::Event::KeyPressed:
-            if (e.key.code == sf::Keyboard::A)
+            if (e.key.code == sf::Keyboard::S)
             {
                 p->move(window, Move_direction::left);
             }
@@ -51,7 +58,8 @@ void Game::poll_events()
             {
                 if (bullets.size() < 1)
                 {
-                    bullets.push_back(new Bullet(p, (sf::Vector2f)sf::Mouse::getPosition(*window)));
+                    bullets.push_back(new Bullet(p->get_sprite().getPosition(), (sf::Vector2f)sf::Mouse::getPosition(*window))
+                    );
                 }
             }
         }
@@ -78,9 +86,16 @@ void Game::update()
             {
                 it->double_ball(balls);
                 single_bullet->remove(bullets);
+                points += 15;
+                sc->update_points(std::to_string(points));
                 break;
             }   
         }
+    }
+    
+    if (timer->is_running())
+    {
+        timer->update(window);
     }
 }
 
@@ -100,5 +115,9 @@ void Game::render()
 
     p->draw(window);
 
+    timer->draw(window);
+    
+    sc->draw(window);
+    
     window->display();
 }
