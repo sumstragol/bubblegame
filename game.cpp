@@ -1,13 +1,27 @@
 #include "game.hpp"
 
+using namespace settings;
+
 Game::Game()
     :points(0),
     lives(1)
 {
-    window = new sf::RenderWindow(sf::VideoMode(settings::SCREEN_WIDTH, settings::SCREEN_HEIGHT), settings::TITLE);
-    window->setFramerateLimit(settings::FPS);
+    window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), TITLE);
+    window->setFramerateLimit(FPS);
     window->clear();
     
+    state = Game_state::Menu;
+
+    const int MID_X = SCREEN_WIDTH / 2;
+
+    logo = new Button(MID_X, 50, LOGO_TEX, true);
+    button_menu = new Button(MID_X, 800, BUTTON_MENU, BUTTON_MENU_HOVER, true);
+    button_play = new Button(MID_X, 400, BUTTON_PLAY, BUTTON_PLAY_HOVER, true);
+    button_resume = new Button(MID_X, 400, BUTTON_RESUME, BUTTON_RESUME_HOVER, true);
+    button_settings = new Button(MID_X, 600, BUTTON_SETTINGS, BUTTON_SETTINGS_HOVER, true);
+    button_exit = new Button(0, 0, "EXIT");
+
+
     Ball* b = new Ball_large();
 
     balls.push_back(b);
@@ -22,7 +36,7 @@ Game::Game()
 
 void Game::run()
 {
-    while (window->isOpen())
+    while (is_running())
     {
         poll_events();
         update();
@@ -42,82 +56,187 @@ void Game::poll_events()
         switch (e.type)
         {
         case sf::Event::Closed:
+        {
             window->close();
             break;
+        }
         case sf::Event::KeyPressed:
-            if (e.key.code == sf::Keyboard::S)
+        {
+            std::cout << button_exit->get_tex(Button_tex_type::regular).getSize().x;
+
+            if (state == Game_state::Menu)
             {
-                p->move(window, Move_direction::left);
+
             }
-            if (e.key.code == sf::Keyboard::D)
+            else if (state == Game_state::Game)
             {
-                p->move(window, Move_direction::right);
-            }
-        case sf::Event::MouseButtonPressed:
-            if (e.mouseButton.button == sf::Mouse::Left)
-            {
-                if (bullets.size() < 1)
+                if (e.key.code == sf::Keyboard::S)
                 {
-                    bullets.push_back(new Bullet(p->get_sprite().getPosition(), (sf::Vector2f)sf::Mouse::getPosition(*window))
-                    );
+                    p->move(window, Move_direction::left);
+                }
+                if (e.key.code == sf::Keyboard::D)
+                {
+                    p->move(window, Move_direction::right);
+                }
+                if (e.key.code == sf::Keyboard::Escape)
+                {
+                    state = Game_state::Pause;
                 }
             }
+            else if (state == Game_state::Pause)
+            {
+                if (e.key.code == sf::Keyboard::Escape)
+                {
+                    state = Game_state::Game;
+                }
+            }
+        }
+        case sf::Event::MouseButtonPressed:
+        {
+            if (state == Game_state::Menu)
+            {
+                if (e.mouseButton.button == sf::Mouse::Left)
+                {
+                    if (button_play->is_hovering())
+                    {
+                        state = Game_state::Game;
+                    }
+                }
+            }
+            else if (state == Game_state::Game)
+            {
+                if (e.mouseButton.button == sf::Mouse::Left)
+                {
+                    if (bullets.size() < 1)
+                    {
+                        bullets.push_back(new Bullet(
+                            sf::Vector2f(
+                                p->get_sprite().getPosition().x + p->get_sprite().getGlobalBounds().width / 4,
+                                p->get_sprite().getPosition().y + p->get_sprite().getGlobalBounds().height / 4
+                            ),
+                            (sf::Vector2f)sf::Mouse::getPosition(*window))
+                        );
+                    }
+                }
+            }
+            else if (state == Game_state::Pause)
+            {
+                if (e.mouseButton.button == sf::Mouse::Left)
+                {
+                    if (button_resume->is_hovering())
+                    {
+                        state = Game_state::Game;
+                    }
+                    if (button_settings->is_hovering())
+                    {
+
+                    }
+                    if (button_menu->is_hovering())
+                    {
+                        state = Game_state::Menu;
+                    }
+                }
+            }
+        }
         }
     }
 }
 
 void Game::update()
 {
-    for (auto& it : balls)
+    if (state == Game_state::Game)
     {
-        it->move(window);
-    }
-
-    for (auto& it : bullets)
-    {
-        it->move(window, bullets);
-    }
-
-    for (auto& it : balls)
-    {
-        for (auto& single_bullet : bullets)
+        for (auto& it : balls)
         {
-            if (it->got_hit(single_bullet->get_sprite()))
+            it->move(window);
+        }
+
+        for (auto& it : bullets)
+        {
+            it->move(window, bullets);
+        }
+
+        for (auto& it : balls)
+        {
+            for (auto& single_bullet : bullets)
             {
-                it->double_ball(balls);
-                single_bullet->remove(bullets);
-                points += 15;
-                sc->update_points(std::to_string(points));
-                break;
-            }   
+                if (it->got_hit(single_bullet->get_sprite()))
+                {
+                    it->double_ball(balls);
+                    single_bullet->remove(bullets);
+                    points += 15;
+                    sc->update_points(std::to_string(points));
+                    break;
+                }
+            }
+        }
+
+        if (timer->is_running())
+        {
+            timer->update(window);
         }
     }
-    
-    if (timer->is_running())
+    else 
     {
-        timer->update(window);
+        sf::Vector2f mouse_pos = (sf::Vector2f)sf::Mouse::getPosition(*window);
+
+        button_menu->hover(mouse_pos);
+        button_settings->hover(mouse_pos);
+
+        if (state == Game_state::Pause)
+        {
+            button_resume->hover(mouse_pos);
+
+            button_exit->hover(mouse_pos);
+        }
+        else if (state == Game_state::Menu)
+        {
+            button_play->hover(mouse_pos);
+        }
     }
+
 }
 
 void Game::render()
 {
     window->clear();
 
-    for (auto& it : balls)
+    if (state == Game_state::Menu)
     {
-        it->draw(window);
+        window->clear(MENU_COLOR_BACKGROUND);
+        logo->draw(window);
+        button_play->draw(window);
+        button_settings->draw(window);
     }
-
-    for (auto& it : bullets)
+    else if (state == Game_state::Game)
     {
-        it->draw(window);
+        for (auto& it : balls)
+        {
+            it->draw(window);
+        }
+
+        for (auto& it : bullets)
+        {
+            it->draw(window);
+        }
+
+        p->draw(window);
+
+        timer->draw(window);
+
+        sc->draw(window);
     }
+    else if (state == Game_state::Pause)
+    {
+        window->clear(MENU_COLOR_BACKGROUND);
+        logo->draw(window);
+        button_resume->draw(window);
+        button_settings->draw(window);
+        button_menu->draw(window);
 
-    p->draw(window);
 
-    timer->draw(window);
-    
-    sc->draw(window);
-    
+       
+    }
+    button_exit->draw(window);
     window->display();
 }

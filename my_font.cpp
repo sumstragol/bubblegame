@@ -16,7 +16,22 @@ void My_font::update_text(const std::string &new_text, const float &y_cor)
     text.setPosition(settings::SCREEN_WIDTH / 2 - text.getGlobalBounds().width / 2, y_cor);
 }
 
+void My_font::update_textt(const std::string& new_text)
+{
+    text.setString(new_text);
+}
+
+void My_font::change_color(const sf::Color& new_color)
+{
+    text.setFillColor(new_color);
+}
+
 void My_font::draw(sf::RenderWindow* window)
 {
     window->draw(text);
+}
+
+const sf::Text My_font::get_text() const
+{
+    return text;
 }
