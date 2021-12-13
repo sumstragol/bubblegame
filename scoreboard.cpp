@@ -2,32 +2,50 @@
 
 Scoreboard::Scoreboard()
 {
-    set_tex(settings::SCOREBOARD_TEX_PATH);
-    attach_tex();
+    sc_values.lives = new Button(450, 0,
+        settings::SCOREBOARD_TEX_PATH, settings::SCOREBOARD_TEX_PATH,
+        "Lives: 0"
+    );
+    sc_values.lives->get_caption_text()->set_font_size(30);
+    sc_values.lives->get_caption_text()->set_color(sf::Color::Red);
+    sc_values.lives->update_text_cor();
     
-    set_pos_x(settings::SCREEN_WIDTH / 2 - get_tex().getSize().x / 2);
-    set_pos_y(0.f);
+    sc_values.points = new Button(450, 45,
+        settings::SCOREBOARD_TEX_PATH, settings::SCOREBOARD_TEX_PATH,
+        "Points: 0"
+    );
+    sc_values.points->get_caption_text()->set_font_size(30);
+    sc_values.points->get_caption_text()->set_color(sf::Color::Red);
+    sc_values.points->update_text_cor();
     
-    points = new My_font(settings::FONT_PATH, settings::FONT_SIZE, settings::FONT_COLOR);
-    points->update_text("Points: 0", settings::FONT_SIZE);
-    
-    lives = new My_font(settings::FONT_PATH, settings::FONT_SIZE, settings::FONT_COLOR);
-    lives->update_text("Lives: 0", 0.f);
-}
-
-void Scoreboard::update_points(const std::string &p)
-{
-    points->update_text("Points: " + p, settings::FONT_SIZE);
-}
-
-void Scoreboard::update_lives(const std::string &ls)
-{
-    lives->update_text("Lives: " + ls, 0.f);
+    sc_values.level = new Button(450, 90,
+        settings::SCOREBOARD_TEX_PATH, settings::SCOREBOARD_TEX_PATH,
+        "Level: 0"
+    );
+    sc_values.level->get_caption_text()->set_font_size(30);
+    sc_values.level->get_caption_text()->set_color(sf::Color::Red);
+    sc_values.level->update_text_cor();
 }
 
 void Scoreboard::draw(sf::RenderWindow *window)
 {
-    window->draw(sprite);
-    points->draw(window);
-    lives->draw(window);
+    sc_values.lives->draw(window);
+    sc_values.points->draw(window);
+    sc_values.level->draw(window);
+}
+
+void Scoreboard::set_value(const std::string& new_val, const Values_type& val_type)
+{
+    if (val_type == Values_type::lives)
+    {
+        sc_values.lives->get_caption_text()->set_text(new_val);
+    }
+    else if (val_type == Values_type::points)
+    {
+        sc_values.points->get_caption_text()->set_text(new_val);
+    }
+    else if (val_type == Values_type::level)
+    {
+        sc_values.level->get_caption_text()->set_text(new_val);
+    }
 }

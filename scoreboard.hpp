@@ -2,16 +2,27 @@
 
 #include "includes.hpp"
 #include "entity.hpp"
-#include "my_font.hpp"
+#include "button.hpp"
+
+class Button;
+
+enum class Values_type
+{
+  lives, points, level
+};
 
 class Scoreboard : public Entity
 {
 public:
     Scoreboard();
-    void update_points(const std::string &p);
-    void update_lives(const std::string &ls);
     void draw(sf::RenderWindow *window);
+    void set_value(const std::string& new_val, const Values_type& val_type);
 private:
-    My_font* lives;
-    My_font* points;
+    struct Values {
+        Button* lives;
+        Button* points;
+        Button* level;
+    };
+    
+    Values sc_values;
 };

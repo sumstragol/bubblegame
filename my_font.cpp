@@ -10,20 +10,24 @@ My_font::My_font(const std::string& font_path, const unsigned int &font_size, co
     text.setFillColor(font_color);
 }
 
-void My_font::update_text(const std::string &new_text, const float &y_cor)
-{
-    text.setString(new_text);
-    text.setPosition(settings::SCREEN_WIDTH / 2 - text.getGlobalBounds().width / 2, y_cor);
-}
-
-void My_font::update_textt(const std::string& new_text)
+void My_font::set_text(const std::string& new_text)
 {
     text.setString(new_text);
 }
 
-void My_font::change_color(const sf::Color& new_color)
+void My_font::set_color(const sf::Color& new_color)
 {
     text.setFillColor(new_color);
+}
+
+void My_font::set_position(const float &x_cor, const float &y_cor)
+{
+    text.setPosition(x_cor, y_cor);
+}
+
+void My_font::set_font_size(const unsigned int &s)
+{
+    text.setCharacterSize(s);
 }
 
 void My_font::draw(sf::RenderWindow* window)

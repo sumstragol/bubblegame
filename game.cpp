@@ -14,12 +14,12 @@ Game::Game()
 
     const int MID_X = SCREEN_WIDTH / 2;
 
-    logo = new Button(MID_X, 50, LOGO_TEX, true);
-    button_menu = new Button(MID_X, 800, BUTTON_MENU, BUTTON_MENU_HOVER, true);
-    button_play = new Button(MID_X, 400, BUTTON_PLAY, BUTTON_PLAY_HOVER, true);
-    button_resume = new Button(MID_X, 400, BUTTON_RESUME, BUTTON_RESUME_HOVER, true);
-    button_settings = new Button(MID_X, 600, BUTTON_SETTINGS, BUTTON_SETTINGS_HOVER, true);
-    button_exit = new Button(0, 0, "EXIT");
+    logo = new Button(450, 100, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "BUBBLE");
+    button_menu = new Button(450, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "MENU");
+    button_play = new Button(450, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "PLAY");
+    button_resume = new Button(450, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "RESUME");
+    button_settings = new Button(450, 600, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "SETTINGS");
+    button_exit = new Button(450, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "EXIT");
 
 
     Ball* b = new Ball_large();
@@ -29,7 +29,9 @@ Game::Game()
     p = new Player();
     
     sc = new Scoreboard();
-    sc->update_lives(std::to_string(lives));
+    sc->set_value("Lives: " + std::to_string(1), Values_type::lives);
+    sc->set_value("Points: " + std::to_string(0), Values_type::points);
+    sc->set_value("Level: " + std::to_string(0) , Values_type::level);
     
     timer = new Timer(0.8f);
 }
@@ -62,8 +64,6 @@ void Game::poll_events()
         }
         case sf::Event::KeyPressed:
         {
-            std::cout << button_exit->get_tex(Button_tex_type::regular).getSize().x;
-
             if (state == Game_state::Menu)
             {
 
@@ -100,6 +100,10 @@ void Game::poll_events()
                     if (button_play->is_hovering())
                     {
                         state = Game_state::Game;
+                    }
+                    if (button_exit->is_hovering())
+                    {
+                        window->close();
                     }
                 }
             }
@@ -165,7 +169,7 @@ void Game::update()
                     it->double_ball(balls);
                     single_bullet->remove(bullets);
                     points += 15;
-                    sc->update_points(std::to_string(points));
+                    sc->set_value("Points: " + std::to_string(points), Values_type::points);
                     break;
                 }
             }
@@ -192,6 +196,7 @@ void Game::update()
         else if (state == Game_state::Menu)
         {
             button_play->hover(mouse_pos);
+            button_exit->hover(mouse_pos);
         }
     }
 
@@ -201,12 +206,22 @@ void Game::render()
 {
     window->clear();
 
-    if (state == Game_state::Menu)
+    if (state == Game_state::Menu || state == Game_state::Pause)
     {
         window->clear(MENU_COLOR_BACKGROUND);
         logo->draw(window);
-        button_play->draw(window);
         button_settings->draw(window);
+        
+        if (state == Game_state::Menu)
+        {
+            button_play->draw(window);
+            button_exit->draw(window);
+        }
+        else if (state == Game_state::Pause)
+        {
+            button_resume->draw(window);
+            button_menu->draw(window);
+        }
     }
     else if (state == Game_state::Game)
     {
@@ -226,17 +241,6 @@ void Game::render()
 
         sc->draw(window);
     }
-    else if (state == Game_state::Pause)
-    {
-        window->clear(MENU_COLOR_BACKGROUND);
-        logo->draw(window);
-        button_resume->draw(window);
-        button_settings->draw(window);
-        button_menu->draw(window);
-
-
-       
-    }
-    button_exit->draw(window);
+    
     window->display();
 }

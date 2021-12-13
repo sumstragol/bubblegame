@@ -1,84 +1,51 @@
 #include "button.hpp"
 
-Button::Button(const float& cor_x, const float& cor_y,
-	const std::string& tex_reg_path, const bool& adjust_x
+Button::Button(
+               const float& cor_x, const float& cor_y,
+               const std::string &tex_path, const std::string& hover_tex_path,
+               const std::string& button_text
 )
 	:is_on_hover(false)
 {
-	set_tex(tex_reg_path, Button_tex_type::regular);
+	// prepare button
+    // textures
+    set_tex(tex_path, Button_tex_type::regular);
+    set_tex(hover_tex_path, Button_tex_type::hover);
+    
+    attach_tex(Button_tex_type::regular);
 
-	attach_tex(Button_tex_type::regular);
-
-
-	set_pos_x(cor_x);
-	if (adjust_x)
-	{
-		set_pos_x(get_pos_x() - sprite.getTexture()->getSize().x / 2);
-	}
-	set_pos_y(cor_y);
+    // captions
+    cap.regular = new My_font(settings::FONT_PATH, settings::BUTTON_FONT_SIZE, settings::BUTTON_FONT_COLOR);
+    cap.regular->set_text(button_text);
+    
+    cap.hover = new My_font(settings::FONT_PATH, settings::BUTTON_FONT_SIZE, settings::BUTTON_HOVER_FONT_COLOR);
+    cap.hover->set_text(button_text);
+    
+    // pos of captions
+    
+    const float right_cor_x =
+        cor_x + (get_tex(Button_tex_type::regular).getSize().x / 2 - cap.regular->get_text().getGlobalBounds().width / 2);
+    cap.regular->set_position(right_cor_x, cor_y);
+    cap.hover->set_position(right_cor_x, cor_y);
+    
+    // pos of button
+    
+    set_pos_x(cor_x);
+    set_pos_y(cor_y);
 }
 
-Button::Button(const float& cor_x, const float& cor_y,
-	const std::string &tex_reg_path, const std::string &tex_hover_path,
-	const bool& adjust_x
-)
-	:is_on_hover(false)
+void Button::draw(sf::RenderWindow *window) const
 {
-	set_tex(tex_reg_path, Button_tex_type::regular);
-	set_tex(tex_hover_path, Button_tex_type::hover);
-
-	attach_tex(Button_tex_type::regular);
-
-	set_pos_x(cor_x);
-	if (adjust_x)
-	{
-		set_pos_x(get_pos_x() - sprite.getTexture()->getSize().x / 2);
-	}
-	set_pos_y(cor_y);
-}
-
-Button::Button(const float& cor_x, const float& cor_y, const std::string& button_text)
-	:is_on_hover(false)
-{
-	// prepare button ingredients
-
-	sf::RenderTexture* temp_rt = new sf::RenderTexture;
-	sf::Sprite* temp_s = new sf::Sprite();
-	My_font* temp_f = new My_font(settings::FONT_PATH, settings::FONT_SIZE, sf::Color::White);
-	temp_f->update_textt(button_text);
-
-	// regular button 
-
-	temp_rt->clear();
-	temp_s->setTexture(util::get_tex(settings::BUTTON));
-	temp_rt->draw(*temp_s);
-	temp_rt->draw(temp_f->get_text());
-	temp_rt->display();
-
-	tex.regular = temp_rt->getTexture();
-
-	// hover button
-	/*
-	temp_f->change_color(sf::Color::Black);
-
-	temp_rt->clear();
-	temp_s->setTexture(util::get_tex(settings::BUTTON_HOVER));
-	temp_rt->draw(*temp_s);
-	temp_rt->draw(temp_f->get_text());
-	temp_rt->display();
-
-	tex.hover = temp_rt->getTexture();
-	*/
-	// rest
-
-	attach_tex(Button_tex_type::regular);
-
-	set_pos_x(cor_x);
-	set_pos_x(cor_y);
-
-	delete temp_rt;
-	delete temp_s;
-	delete temp_f;
+    window->draw(sprite);
+    
+    if (!is_hovering())
+    {
+        cap.regular->draw(window);
+    }
+    else
+    {
+        cap.hover->draw(window);
+    }
 }
 
 const sf::Texture Button::get_tex(const Button_tex_type& type) const
@@ -129,6 +96,24 @@ void Button::attach_tex(const Button_tex_type& type)
 	}
 } 
 
+void Button::update_text_cor(const Button_tex_type& type)
+{
+    const float cor_x =
+        get_pos_x() + (get_tex(Button_tex_type::regular).getSize().x / 2 - cap.regular->get_text().getGlobalBounds().width / 2);
+    
+    const float cor_y =
+        get_pos_y() + (get_tex(Button_tex_type::regular).getSize().y / 2 - cap.regular->get_text().getGlobalBounds().height / 2);
+    
+    if (type == Button_tex_type::regular)
+    {
+        cap.regular->set_position(cor_x, cor_y);
+    }
+    else if (type == Button_tex_type::hover)
+    {
+        cap.hover->set_position(cor_x, cor_y);
+    }
+}
+
 void Button::hover(const sf::Vector2f& pos)
 {
 	if (sprite.getGlobalBounds().contains(pos))
@@ -147,3 +132,16 @@ bool Button::is_hovering() const
 {
 	return is_on_hover;
 }
+
+My_font* Button::get_caption_text(const Button_tex_type& type)
+{
+    if (type == Button_tex_type::regular)
+    {
+        return cap.regular;
+    }
+    else if (type == Button_tex_type::hover)
+    {
+        return cap.hover;
+    }
+}
+

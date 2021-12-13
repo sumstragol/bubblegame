@@ -8,15 +8,12 @@
 #include "timer.hpp"
 #include "button.hpp"
 
-
 enum class Game_state 
 {
 	Game, Menu, Pause
 };
 
 enum class Move_direction;
-
-
 
 class Game
 {
@@ -30,15 +27,13 @@ private:
 	void render();
 
 	Game_state state;
+    
 	Button* logo;
 	Button* button_menu;
 	Button* button_play;
 	Button* button_resume;
 	Button* button_settings;
 	Button* button_exit;
-
-
-
 
 	sf::RenderWindow* window;
 	sf::Event e;
