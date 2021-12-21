@@ -12,6 +12,8 @@ public:
     void set_position(const float &x_cor, const float &y_cor);
     void set_font_size(const unsigned int& s);
     
+    unsigned int get_font_size() const;
+
     void draw(sf::RenderWindow* window);
     const sf::Text get_text() const; 
 private:

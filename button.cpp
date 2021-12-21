@@ -15,6 +15,7 @@ Button::Button(
     attach_tex(Button_tex_type::regular);
 
     // captions
+
     cap.regular = new My_font(settings::FONT_PATH, settings::BUTTON_FONT_SIZE, settings::BUTTON_FONT_COLOR);
     cap.regular->set_text(button_text);
     
@@ -25,6 +26,10 @@ Button::Button(
     
     const float right_cor_x =
         cor_x + (get_tex(Button_tex_type::regular).getSize().x / 2 - cap.regular->get_text().getGlobalBounds().width / 2);
+
+    const float right_cor_y =
+        (get_pos_y() - (settings::BUTTON_FONT_SIZE / 2)) + (get_tex(Button_tex_type::regular).getSize().x / 2 - cap.regular->get_text().getGlobalBounds().width / 2);
+
     cap.regular->set_position(right_cor_x, cor_y);
     cap.hover->set_position(right_cor_x, cor_y);
     
@@ -98,18 +103,24 @@ void Button::attach_tex(const Button_tex_type& type)
 
 void Button::update_text_cor(const Button_tex_type& type)
 {
-    const float cor_x =
-        get_pos_x() + (get_tex(Button_tex_type::regular).getSize().x / 2 - cap.regular->get_text().getGlobalBounds().width / 2);
-    
-    const float cor_y =
-        get_pos_y() + (get_tex(Button_tex_type::regular).getSize().y / 2 - cap.regular->get_text().getGlobalBounds().height / 2);
-    
     if (type == Button_tex_type::regular)
     {
+        const float cor_x =
+            get_pos_x() + (get_tex(Button_tex_type::regular).getSize().x / 2 - cap.regular->get_text().getGlobalBounds().width / 2);
+
+        const float cor_y =
+            (get_pos_y() - (cap.regular->get_font_size() / 2) + 2) + (get_tex(Button_tex_type::regular).getSize().y / 2 - cap.regular->get_text().getGlobalBounds().height / 2);
+
         cap.regular->set_position(cor_x, cor_y);
     }
     else if (type == Button_tex_type::hover)
     {
+        const float cor_x =
+            get_pos_x() + (get_tex(Button_tex_type::hover).getSize().x / 2 - cap.hover->get_text().getGlobalBounds().width / 2);
+
+        const float cor_y =
+            (get_pos_y() - (cap.regular->get_font_size() / 2) + 2) + (get_tex(Button_tex_type::hover).getSize().y / 2 - cap.hover->get_text().getGlobalBounds().height / 2);
+
         cap.hover->set_position(cor_x, cor_y);
     }
 }

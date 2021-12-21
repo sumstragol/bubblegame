@@ -2,7 +2,7 @@
 
 Scoreboard::Scoreboard()
 {
-    sc_values.lives = new Button(450, 0,
+    sc_values.lives = new Button(600, 0,
         settings::SCOREBOARD_TEX_PATH, settings::SCOREBOARD_TEX_PATH,
         "Lives: 0"
     );
@@ -10,7 +10,7 @@ Scoreboard::Scoreboard()
     sc_values.lives->get_caption_text()->set_color(sf::Color::Red);
     sc_values.lives->update_text_cor();
     
-    sc_values.points = new Button(450, 45,
+    sc_values.points = new Button(600, 34,
         settings::SCOREBOARD_TEX_PATH, settings::SCOREBOARD_TEX_PATH,
         "Points: 0"
     );
@@ -18,7 +18,7 @@ Scoreboard::Scoreboard()
     sc_values.points->get_caption_text()->set_color(sf::Color::Red);
     sc_values.points->update_text_cor();
     
-    sc_values.level = new Button(450, 90,
+    sc_values.level = new Button(600, 68,
         settings::SCOREBOARD_TEX_PATH, settings::SCOREBOARD_TEX_PATH,
         "Level: 0"
     );
@@ -39,13 +39,16 @@ void Scoreboard::set_value(const std::string& new_val, const Values_type& val_ty
     if (val_type == Values_type::lives)
     {
         sc_values.lives->get_caption_text()->set_text(new_val);
+        sc_values.lives->update_text_cor();
     }
     else if (val_type == Values_type::points)
     {
         sc_values.points->get_caption_text()->set_text(new_val);
+        sc_values.points->update_text_cor();
     }
     else if (val_type == Values_type::level)
     {
         sc_values.level->get_caption_text()->set_text(new_val);
+        sc_values.level->update_text_cor();
     }
 }

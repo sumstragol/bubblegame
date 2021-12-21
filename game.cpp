@@ -12,14 +12,14 @@ Game::Game()
     
     state = Game_state::Menu;
 
-    const int MID_X = SCREEN_WIDTH / 2;
+    const int temp_x = 500;
 
-    logo = new Button(450, 100, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "BUBBLE");
-    button_menu = new Button(450, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "MENU");
-    button_play = new Button(450, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "PLAY");
-    button_resume = new Button(450, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "RESUME");
-    button_settings = new Button(450, 600, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "SETTINGS");
-    button_exit = new Button(450, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "EXIT");
+    logo = new Button(temp_x, 100, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "BUBBLE");
+    button_menu = new Button(temp_x, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "MENU");
+    button_play = new Button(temp_x, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "PLAY");
+    button_resume = new Button(temp_x, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "RESUME");
+    button_settings = new Button(temp_x, 600, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "SETTINGS");
+    button_exit = new Button(temp_x, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "EXIT");
 
 
     Ball* b = new Ball_large();

@@ -17,7 +17,8 @@ void My_font::set_text(const std::string& new_text)
 
 void My_font::set_color(const sf::Color& new_color)
 {
-    text.setFillColor(new_color);
+    font_color = new_color;
+    text.setFillColor(font_color);
 }
 
 void My_font::set_position(const float &x_cor, const float &y_cor)
@@ -27,7 +28,13 @@ void My_font::set_position(const float &x_cor, const float &y_cor)
 
 void My_font::set_font_size(const unsigned int &s)
 {
-    text.setCharacterSize(s);
+    font_size = s;
+    text.setCharacterSize(font_size);
+}
+
+unsigned int My_font::get_font_size() const
+{
+    return font_size;
 }
 
 void My_font::draw(sf::RenderWindow* window)
