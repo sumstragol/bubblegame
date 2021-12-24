@@ -1,6 +1,6 @@
 #include "ball.hpp"
 
-Ball::Ball()
+Ball::Ball(const float& cor_x, const float& cor_y)
 	:gravity(settings::BALL_GRAVITY),
 	after_create(true)
 {
@@ -9,6 +9,9 @@ Ball::Ball()
 
 	set_speed_x(settings::BALL_HORIZONTAL_SPEED);
 	set_speed_y(settings::BALL_VERTICAL_SPEED);
+
+    set_pos_x(cor_x);
+    set_pos_y(cor_y);
 }
 
 Ball::Ball(const Ball* b)
@@ -59,8 +62,8 @@ void Ball::neg_speed_x()
     speed_x *= -1;
 }
 
-Ball_small::Ball_small()
-    :Ball()
+Ball_small::Ball_small(const float& cor_x, const float& cor_y)
+    :Ball(cor_x, cor_y)
 {
     sprite.setColor(settings::BALL_COLOR_SMALL);
     sprite.setScale(settings::BALL_SCALE_SMALL, settings::BALL_SCALE_SMALL);
@@ -86,8 +89,8 @@ float Ball_small::get_max_speed_y() const
     return settings::BALL_MAX_GRAVITY_SMALL;
 }
 
-Ball_medium::Ball_medium()
-    :Ball()
+Ball_medium::Ball_medium(const float& cor_x, const float& cor_y)
+    :Ball(cor_x, cor_y)
 {
     sprite.setColor(settings::BALL_COLOR_MEDIUM);
     sprite.setScale(settings::BALL_SCALE_MEDIUM, settings::BALL_SCALE_MEDIUM);
@@ -117,8 +120,8 @@ float Ball_medium::get_max_speed_y() const
     return settings::BALL_MAX_GRAVITY_MEDIUM;
 }
 
-Ball_large::Ball_large()
-    :Ball()
+Ball_large::Ball_large(const float& cor_x, const float& cor_y)
+    :Ball(cor_x, cor_y)
 {
     sprite.setColor(settings::BALL_COLOR_LARGE);
     sprite.setScale(settings::BALL_SCALE_LARGE, settings::BALL_SCALE_LARGE);

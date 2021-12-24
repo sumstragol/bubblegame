@@ -21,19 +21,19 @@ Game::Game()
     button_settings = new Button(temp_x, 600, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "SETTINGS");
     button_exit = new Button(temp_x, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "EXIT");
 
-
-    Ball* b = new Ball_large();
-
-    balls.push_back(b);
-
     p = new Player();
     
     sc = new Scoreboard();
-    sc->set_value("Lives: " + std::to_string(1), Values_type::lives);
-    sc->set_value("Points: " + std::to_string(0), Values_type::points);
-    sc->set_value("Level: " + std::to_string(0) , Values_type::level);
-    
-    timer = new Timer(0.8f);
+    sc->set_value("Lives: " + std::to_string(lives), Value_type::lives);
+    sc->set_value("Points: " + std::to_string(points), Value_type::points);
+    sc->set_value("Level: " + std::to_string(0) , Value_type::level);
+
+    float time;
+    Level::load_level("levels/level1.txt", balls, time);
+    std::cout << time;
+    timer = new Timer(time);
+
+    //std::cout << "ball vector size" << balls.size() << "\n";
 }
 
 void Game::run()
@@ -169,7 +169,7 @@ void Game::update()
                     it->double_ball(balls);
                     single_bullet->remove(bullets);
                     points += 15;
-                    sc->set_value("Points: " + std::to_string(points), Values_type::points);
+                    sc->set_value("Points: " + std::to_string(points), Value_type::points);
                     break;
                 }
             }

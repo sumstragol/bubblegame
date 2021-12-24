@@ -34,19 +34,19 @@ void Scoreboard::draw(sf::RenderWindow *window)
     sc_values.level->draw(window);
 }
 
-void Scoreboard::set_value(const std::string& new_val, const Values_type& val_type)
+void Scoreboard::set_value(const std::string& new_val, const Value_type& val_type)
 {
-    if (val_type == Values_type::lives)
+    if (val_type == Value_type::lives)
     {
         sc_values.lives->get_caption_text()->set_text(new_val);
         sc_values.lives->update_text_cor();
     }
-    else if (val_type == Values_type::points)
+    else if (val_type == Value_type::points)
     {
         sc_values.points->get_caption_text()->set_text(new_val);
         sc_values.points->update_text_cor();
     }
-    else if (val_type == Values_type::level)
+    else if (val_type == Value_type::level)
     {
         sc_values.level->get_caption_text()->set_text(new_val);
         sc_values.level->update_text_cor();

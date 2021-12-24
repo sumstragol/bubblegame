@@ -3,10 +3,15 @@
 #include "includes.hpp"
 #include "entity.hpp"
 
+enum class Ball_type
+{
+	large, medium, small
+};
+
 class Ball : public Entity
 {
 public:
-	Ball();
+	Ball(const float& cor_x, const float& cor_y);
 	Ball(const Ball* b);
 	virtual ~Ball();
 	void move(sf::RenderWindow* window);
@@ -22,7 +27,7 @@ protected:
 class Ball_small : public Ball
 {
 public:
-	Ball_small();
+	Ball_small(const float& cor_x, const float& cor_y);
 	Ball_small(const Ball* b);
 	void double_ball(std::vector<Ball*>& vec) override;
 private:
@@ -32,7 +37,7 @@ private:
 class Ball_medium : public Ball
 {
 public:
-	Ball_medium();
+	Ball_medium(const float& cor_x, const float& cor_y);
 	Ball_medium(const Ball* b);
 	void double_ball(std::vector<Ball*>& vec) override;
 private:
@@ -42,7 +47,7 @@ private:
 class Ball_large : public Ball
 {
 public:
-	Ball_large();
+	Ball_large(const float& cor_x, const float& cor_y);
 	Ball_large(const Ball* b);
 	void double_ball(std::vector<Ball*>& vec) override;
 private:
