@@ -3,6 +3,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include <array>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>

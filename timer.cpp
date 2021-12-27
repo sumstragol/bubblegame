@@ -26,3 +26,13 @@ void Timer::update(sf::RenderWindow *window)
         is_active = false;
     }
 }
+
+void Timer::set_time(const float& t)
+{
+    set_speed_x(-t);
+}
+
+void Timer::reset()
+{
+    set_pos_x(0);
+}

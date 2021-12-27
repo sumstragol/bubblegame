@@ -4,14 +4,15 @@ using namespace settings;
 
 Game::Game()
     :points(0),
-    lives(1)
+    lives(1),
+    current_level_index(1)
 {
     window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), TITLE);
     window->setFramerateLimit(FPS);
     window->clear();
     
     state = Game_state::Menu;
-
+    
     const int temp_x = 500;
 
     logo = new Button(temp_x, 100, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "BUBBLE");
@@ -20,20 +21,22 @@ Game::Game()
     button_resume = new Button(temp_x, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "RESUME");
     button_settings = new Button(temp_x, 600, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "SETTINGS");
     button_exit = new Button(temp_x, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "EXIT");
-
+    
+    for (int i = 0; i < level_paths.size(); i++)
+    {
+        buttons_for_levels.at(i) = new Button(200 + i * 150, 400, BUTTON_L_TEX_PATH, BUTTON_HOVER_L_TEX_PATH, std::to_string(i + 1));
+    }
+    
+    
+    
     p = new Player();
     
     sc = new Scoreboard();
     sc->set_value("Lives: " + std::to_string(lives), Value_type::lives);
     sc->set_value("Points: " + std::to_string(points), Value_type::points);
-    sc->set_value("Level: " + std::to_string(0) , Value_type::level);
+    sc->set_value("Level: " + std::to_string(current_level_index) , Value_type::level);
 
-    float time;
-    Level::load_level("levels/level1.txt", balls, time);
-    std::cout << time;
-    timer = new Timer(time);
-
-    //std::cout << "ball vector size" << balls.size() << "\n";
+    timer = new Timer(0.f);
 }
 
 void Game::run()
@@ -64,6 +67,7 @@ void Game::poll_events()
         }
         case sf::Event::KeyPressed:
         {
+            
             if (state == Game_state::Menu)
             {
 
@@ -90,6 +94,7 @@ void Game::poll_events()
                     state = Game_state::Game;
                 }
             }
+            
         }
         case sf::Event::MouseButtonPressed:
         {
@@ -99,7 +104,7 @@ void Game::poll_events()
                 {
                     if (button_play->is_hovering())
                     {
-                        state = Game_state::Game;
+                        state = Game_state::Level;
                     }
                     if (button_exit->is_hovering())
                     {
@@ -138,7 +143,29 @@ void Game::poll_events()
                     if (button_menu->is_hovering())
                     {
                         state = Game_state::Menu;
+                        clear_level();
                     }
+                }
+            }
+            else if (state == Game_state::Level)
+            {
+                if (e.mouseButton.button == sf::Mouse::Left)
+                {
+                    if (button_menu->is_hovering())
+                    {
+                        state = Game_state::Menu;
+                    }
+                    
+                    std::for_each_n(buttons_for_levels.begin(), current_level_index, [this, indx = 0](auto& single_button) mutable
+                        {
+                            if (single_button->is_hovering())
+                            {
+                                run_level(indx);
+                            }
+                    
+                            indx++;
+                        }
+                    );
                 }
             }
         }
@@ -150,6 +177,7 @@ void Game::update()
 {
     if (state == Game_state::Game)
     {
+        
         for (auto& it : balls)
         {
             it->move(window);
@@ -170,6 +198,8 @@ void Game::update()
                     single_bullet->remove(bullets);
                     points += 15;
                     sc->set_value("Points: " + std::to_string(points), Value_type::points);
+                    
+                    check_for_win();
                     break;
                 }
             }
@@ -198,6 +228,14 @@ void Game::update()
             button_play->hover(mouse_pos);
             button_exit->hover(mouse_pos);
         }
+        else if (state == Game_state::Level)
+        {
+            button_menu->hover(mouse_pos);
+            
+            std::for_each_n(buttons_for_levels.begin(), current_level_index, [&mouse_pos](auto& single_button){
+                single_button->hover(mouse_pos);
+            });
+        }
     }
 
 }
@@ -223,6 +261,18 @@ void Game::render()
             button_menu->draw(window);
         }
     }
+    else if (state == Game_state::Level)
+    {
+        window->clear(MENU_COLOR_BACKGROUND);
+        logo->draw(window);
+        
+        button_menu->draw(window);
+        
+        for (const auto& single_button : buttons_for_levels)
+        {
+            single_button->draw(window);
+        }
+    }
     else if (state == Game_state::Game)
     {
         for (auto& it : balls)
@@ -243,4 +293,57 @@ void Game::render()
     }
     
     window->display();
+}
+
+void Game::clear_level()
+{
+    // reset player position
+    p->set_pos_x(settings::SCREEN_WIDTH / 2 - p->get_tex().getSize().x / 2);
+    p->set_pos_y(settings::SCREEN_HEIGHT - p->get_tex().getSize().y);
+    
+    // clear balls content
+    std::for_each(balls.begin(), balls.end(), [](auto &it)
+        {
+            delete it;
+        }
+    );
+    balls.clear();
+    
+    // clear bullets content
+    std::for_each(bullets.begin(), bullets.end(), [](auto &it)
+        {
+            delete it;
+        }
+    );
+    bullets.clear();
+    
+    // reset timer
+    timer->reset();
+}
+
+void Game::run_level(const int index)
+{
+    state = Game_state::Game;
+    
+    clear_level();
+
+    float temp;
+    Level::load_level(level_paths.at(index), balls, temp);
+    timer->set_time(temp);
+    sc->set_value("Level: " + std::to_string(index + 1), Value_type::level);
+}
+
+void Game::stop_level()
+{
+    
+}
+
+void Game::check_for_win()
+{
+    std::cout << balls.size();
+    if (balls.empty())
+    {
+        state = Game_state::Level;
+        current_level_index++;
+    }
 }

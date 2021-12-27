@@ -12,7 +12,7 @@
 
 enum class Game_state 
 {
-	Game, Menu, Pause
+	Game, Menu, Pause, Level
 };
 
 enum class Move_direction;
@@ -28,6 +28,11 @@ private:
 	void update();
 	void render();
 
+    void run_level(const int index);
+    void clear_level();
+    void stop_level();
+    void check_for_win();
+    
 	Game_state state;
     
 	Button* logo;
@@ -36,7 +41,18 @@ private:
 	Button* button_resume;
 	Button* button_settings;
 	Button* button_exit;
-
+    std::array<const std::string, 8> level_paths = {
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level1.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level2.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level3.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level4.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level5.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level6.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level7.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level8.txt",
+    };
+    std::array<Button*, 8> buttons_for_levels;
+    
 	sf::RenderWindow* window;
 	sf::Event e;
 	std::vector<Ball*> balls;
@@ -47,4 +63,5 @@ private:
     
     unsigned int points;
     unsigned int lives;
+    unsigned int current_level_index;
 };

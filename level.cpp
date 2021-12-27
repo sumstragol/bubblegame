@@ -145,7 +145,7 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
 		}
 		default:
 		{
-			std::cout << single_line << "\n";
+			std::cout << "Undefined key " << single_line << "\n";
 			break;
 		}
 		}
