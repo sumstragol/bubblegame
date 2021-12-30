@@ -4,6 +4,8 @@
 #include <math.h>
 #include <vector>
 #include <array>
+#include <thread>
+#include <chrono>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>

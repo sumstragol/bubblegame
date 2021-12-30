@@ -33,3 +33,8 @@ bool util::is_colliding(const sf::Sprite &first, const sf::Sprite &second)
 {
     return first.getGlobalBounds().intersects(second.getGlobalBounds());
 }
+
+void util::my_sleep(const unsigned int &ms)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}

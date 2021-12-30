@@ -6,7 +6,7 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
 {
 	enum class Key_word
 	{
-		large, medium, small, time
+		large, medium, small, time, end
 	};
 
 	std::ifstream input_file(path);
@@ -28,6 +28,7 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
 			else if (single_line.find("medium") != std::string::npos) return Key_word::medium;
 			else if (single_line.find("small") != std::string::npos) return Key_word::small;
 			else if (single_line.find("time") != std::string::npos) return Key_word::time;
+            else if (single_line.find("end") != std::string::npos) return Key_word::end;
 		};
 
 		// if the known key was found, next line of the file sholud be represting
@@ -55,7 +56,7 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
 			{
 				std::getline(input_file, single_line);
 
-				return (float)std::atof(single_line.c_str());
+                return (float)std::atof(single_line.c_str());
 			}
 			catch (...)
 			{
@@ -74,7 +75,7 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
 			{
 				std::getline(input_file, single_line);
 				std::stringstream line_stream(single_line);
-				
+                
 				std::vector<std::string> tokens;
 				std::string single_token;
 				while (line_stream >> single_token)
@@ -138,6 +139,11 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
 
 			break;
 		}
+        case Key_word::end:
+        {
+            return;
+            break;
+        }
 		case Key_word::time:
 		{
 			time = float_conversion();

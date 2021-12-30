@@ -12,4 +12,5 @@ namespace util {
     void direction_vector(sf::Vector2f &t, const sf::Vector2f &f, const sf::Vector2f &s);
     //collision
     bool is_colliding(const sf::Sprite &first, const sf::Sprite &second);
+    void my_sleep(const unsigned int& ms);
 }

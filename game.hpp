@@ -9,10 +9,9 @@
 #include "button.hpp"
 #include "level.hpp"
 
-
 enum class Game_state 
 {
-	Game, Menu, Pause, Level
+	Game, Menu, Pause, Level, Count_down
 };
 
 enum class Move_direction;
@@ -30,8 +29,8 @@ private:
 
     void run_level(const int index);
     void clear_level();
-    void stop_level();
     void check_for_win();
+    void level_fail();
     
 	Game_state state;
     
@@ -41,7 +40,9 @@ private:
 	Button* button_resume;
 	Button* button_settings;
 	Button* button_exit;
-    std::array<const std::string, 8> level_paths = {
+    
+    static const unsigned int level_count = 8;
+    std::array<const std::string, level_count> level_paths = {
         "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level1.txt",
         "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level2.txt",
         "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level3.txt",
@@ -51,7 +52,7 @@ private:
         "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level7.txt",
         "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level8.txt",
     };
-    std::array<Button*, 8> buttons_for_levels;
+    std::array<Button*, level_count> buttons_for_levels;
     
 	sf::RenderWindow* window;
 	sf::Event e;

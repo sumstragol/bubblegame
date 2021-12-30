@@ -4,7 +4,7 @@ using namespace settings;
 
 Game::Game()
     :points(0),
-    lives(1),
+    lives(30),
     current_level_index(1)
 {
     window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), TITLE);
@@ -24,7 +24,13 @@ Game::Game()
     
     for (int i = 0; i < level_paths.size(); i++)
     {
-        buttons_for_levels.at(i) = new Button(200 + i * 150, 400, BUTTON_L_TEX_PATH, BUTTON_HOVER_L_TEX_PATH, std::to_string(i + 1));
+        buttons_for_levels.at(i) = new Button(
+            200 + i * 150,
+            400,
+            BUTTON_L_TEX_PATH,
+            BUTTON_HOVER_L_TEX_PATH,
+            std::to_string(i + 1)
+        );
     }
     
     
@@ -32,9 +38,9 @@ Game::Game()
     p = new Player();
     
     sc = new Scoreboard();
-    sc->set_value("Lives: " + std::to_string(lives), Value_type::lives);
-    sc->set_value("Points: " + std::to_string(points), Value_type::points);
-    sc->set_value("Level: " + std::to_string(current_level_index) , Value_type::level);
+    sc->set_value(Value_type::lives, lives);
+    sc->set_value(Value_type::points, points);
+    sc->set_value(Value_type::level, current_level_index);
 
     timer = new Timer(0.f);
 }
@@ -118,8 +124,8 @@ void Game::poll_events()
                 {
                     if (bullets.size() < 1)
                     {
-                        bullets.push_back(new Bullet(
-                            sf::Vector2f(
+                        bullets.push_back(
+                            new Bullet(sf::Vector2f(
                                 p->get_sprite().getPosition().x + p->get_sprite().getGlobalBounds().width / 4,
                                 p->get_sprite().getPosition().y + p->get_sprite().getGlobalBounds().height / 4
                             ),
@@ -156,13 +162,14 @@ void Game::poll_events()
                         state = Game_state::Menu;
                     }
                     
-                    std::for_each_n(buttons_for_levels.begin(), current_level_index, [this, indx = 0](auto& single_button) mutable
+                    std::for_each_n(buttons_for_levels.begin(), current_level_index,
+                        [this, indx = 0](auto& single_button) mutable
                         {
                             if (single_button->is_hovering())
                             {
                                 run_level(indx);
                             }
-                    
+                        
                             indx++;
                         }
                     );
@@ -188,6 +195,7 @@ void Game::update()
             it->move(window, bullets);
         }
 
+        // checks for balls collision with a bullets
         for (auto& it : balls)
         {
             for (auto& single_bullet : bullets)
@@ -197,7 +205,7 @@ void Game::update()
                     it->double_ball(balls);
                     single_bullet->remove(bullets);
                     points += 15;
-                    sc->set_value("Points: " + std::to_string(points), Value_type::points);
+                    sc->set_value(Value_type::points, points);
                     
                     check_for_win();
                     break;
@@ -205,9 +213,22 @@ void Game::update()
             }
         }
 
+        // checks for balls collision with a player
+        for (auto& single_ball : balls)
+        {
+            if (p->got_hit(single_ball->get_sprite()))
+            {
+                level_fail();
+            }
+        }
+        
         if (timer->is_running())
         {
             timer->update(window);
+        }
+        else
+        {
+            level_fail();
         }
     }
     else 
@@ -215,7 +236,7 @@ void Game::update()
         sf::Vector2f mouse_pos = (sf::Vector2f)sf::Mouse::getPosition(*window);
 
         button_menu->hover(mouse_pos);
-        button_settings->hover(mouse_pos);
+        //button_settings->hover(mouse_pos);
 
         if (state == Game_state::Pause)
         {
@@ -232,12 +253,15 @@ void Game::update()
         {
             button_menu->hover(mouse_pos);
             
-            std::for_each_n(buttons_for_levels.begin(), current_level_index, [&mouse_pos](auto& single_button){
-                single_button->hover(mouse_pos);
-            });
+            // level buttons
+            std::for_each_n(buttons_for_levels.begin(), current_level_index,
+                [&mouse_pos](auto& single_button)
+                {
+                    single_button->hover(mouse_pos);
+                }
+            );
         }
     }
-
 }
 
 void Game::render()
@@ -302,7 +326,8 @@ void Game::clear_level()
     p->set_pos_y(settings::SCREEN_HEIGHT - p->get_tex().getSize().y);
     
     // clear balls content
-    std::for_each(balls.begin(), balls.end(), [](auto &it)
+    std::for_each(balls.begin(), balls.end(),
+        [](auto &it)
         {
             delete it;
         }
@@ -310,7 +335,8 @@ void Game::clear_level()
     balls.clear();
     
     // clear bullets content
-    std::for_each(bullets.begin(), bullets.end(), [](auto &it)
+    std::for_each(bullets.begin(), bullets.end(),
+        [](auto &it)
         {
             delete it;
         }
@@ -323,27 +349,46 @@ void Game::clear_level()
 
 void Game::run_level(const int index)
 {
-    state = Game_state::Game;
-    
     clear_level();
 
     float temp;
     Level::load_level(level_paths.at(index), balls, temp);
     timer->set_time(temp);
-    sc->set_value("Level: " + std::to_string(index + 1), Value_type::level);
-}
-
-void Game::stop_level()
-{
+    sc->set_value(Value_type::level, current_level_index);
     
+    state = Game_state::Game;
 }
 
 void Game::check_for_win()
 {
-    std::cout << balls.size();
     if (balls.empty())
     {
         state = Game_state::Level;
-        current_level_index++;
+        if (current_level_index < level_count)
+        {
+            current_level_index++;
+        }
     }
+}
+
+void Game::level_fail()
+{
+    util::my_sleep(1000);
+    
+    if (lives == 1)
+    {
+        clear_level();
+        current_level_index = 1;
+        lives = 3;
+        points = 0;
+        sc->set_value(Value_type::level, current_level_index);
+        sc->set_value(Value_type::lives, lives);
+        sc->set_value(Value_type::points, points);
+        state = Game_state::Menu;
+        return;
+    }
+    
+    lives--;
+    sc->set_value(Value_type::lives, lives);
+    run_level(current_level_index - 1);
 }

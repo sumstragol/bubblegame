@@ -35,4 +35,5 @@ void Timer::set_time(const float& t)
 void Timer::reset()
 {
     set_pos_x(0);
+    is_active = true;
 }
