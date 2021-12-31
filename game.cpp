@@ -4,17 +4,17 @@ using namespace settings;
 
 Game::Game()
     :points(0),
-    lives(30),
-    current_level_index(1)
+    lives(3),
+    current_level_index(1),
+    selected_level_index(0)
 {
-    window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), TITLE);
+    window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), TITLE, sf::Style::Titlebar | sf::Style::Close);
     window->setFramerateLimit(FPS);
     window->clear();
     
     state = Game_state::Menu;
     
     const int temp_x = 500;
-
     logo = new Button(temp_x, 100, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "BUBBLE");
     button_menu = new Button(temp_x, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "MENU");
     button_play = new Button(temp_x, 400, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "PLAY");
@@ -22,6 +22,19 @@ Game::Game()
     button_settings = new Button(temp_x, 600, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "SETTINGS");
     button_exit = new Button(temp_x, 800, BUTTON_TEX_PATH, BUTTON_HOVER_TEX_PATH, "EXIT");
     
+    // buttons for count down before any level 
+    for (int i = 0; i < count_down_seconds; i++)
+    {
+        buttons_count_down_numbers.at(i) = new Button(
+            585 + i * 150,
+            400,
+            BUTTON_L_TEX_PATH,
+            BUTTON_HOVER_L_TEX_PATH,
+            std::to_string(count_down_seconds - i)
+        );
+    }
+
+    // buttons for levels
     for (int i = 0; i < level_paths.size(); i++)
     {
         buttons_for_levels.at(i) = new Button(
@@ -32,8 +45,6 @@ Game::Game()
             std::to_string(i + 1)
         );
     }
-    
-    
     
     p = new Player();
     
@@ -73,32 +84,40 @@ void Game::poll_events()
         }
         case sf::Event::KeyPressed:
         {
-            
             if (state == Game_state::Menu)
             {
-
+                return;
+            }
+            else if (state == Game_state::Count_down)
+            {
+                return;
             }
             else if (state == Game_state::Game)
             {
-                if (e.key.code == sf::Keyboard::S)
+                if (e.key.code == sf::Keyboard::A)
                 {
-                    p->move(window, Move_direction::left);
+                    p->move(window, Move_direction::left, clock);
                 }
                 if (e.key.code == sf::Keyboard::D)
                 {
-                    p->move(window, Move_direction::right);
+                    p->move(window, Move_direction::right, clock);
                 }
                 if (e.key.code == sf::Keyboard::Escape)
                 {
                     state = Game_state::Pause;
                 }
+
+                return;
             }
             else if (state == Game_state::Pause)
             {
                 if (e.key.code == sf::Keyboard::Escape)
                 {
-                    state = Game_state::Game;
+                    state = Game_state::Count_down;
+                    count_down_level();
                 }
+
+                return;
             }
             
         }
@@ -116,7 +135,19 @@ void Game::poll_events()
                     {
                         window->close();
                     }
+                    /*
+                    if (button_settings->is_hovering())
+                    {
+
+                    }
+                    */
                 }
+
+                return;
+            }
+            else if (state == Game_state::Count_down)
+            {
+                return;
             }
             else if (state == Game_state::Game)
             {
@@ -133,6 +164,8 @@ void Game::poll_events()
                         );
                     }
                 }
+
+                return;
             }
             else if (state == Game_state::Pause)
             {
@@ -140,17 +173,22 @@ void Game::poll_events()
                 {
                     if (button_resume->is_hovering())
                     {
-                        state = Game_state::Game;
+                        state = Game_state::Count_down;
+                        count_down_level();
                     }
+                    /*
                     if (button_settings->is_hovering())
                     {
 
                     }
+                    */
                     if (button_menu->is_hovering())
                     {
                         state = Game_state::Menu;
                         clear_level();
                     }
+
+                    return;
                 }
             }
             else if (state == Game_state::Level)
@@ -160,6 +198,7 @@ void Game::poll_events()
                     if (button_menu->is_hovering())
                     {
                         state = Game_state::Menu;
+                        return;
                     }
                     
                     std::for_each_n(buttons_for_levels.begin(), current_level_index,
@@ -168,6 +207,8 @@ void Game::poll_events()
                             if (single_button->is_hovering())
                             {
                                 run_level(indx);
+
+                                return;
                             }
                         
                             indx++;
@@ -175,6 +216,12 @@ void Game::poll_events()
                     );
                 }
             }
+            /*
+            else if (state == Game_state::Settings)
+            {
+             
+            }
+            */
         }
         }
     }
@@ -184,7 +231,6 @@ void Game::update()
 {
     if (state == Game_state::Game)
     {
-        
         for (auto& it : balls)
         {
             it->move(window);
@@ -241,7 +287,6 @@ void Game::update()
         if (state == Game_state::Pause)
         {
             button_resume->hover(mouse_pos);
-
             button_exit->hover(mouse_pos);
         }
         else if (state == Game_state::Menu)
@@ -250,9 +295,7 @@ void Game::update()
             button_exit->hover(mouse_pos);
         }
         else if (state == Game_state::Level)
-        {
-            button_menu->hover(mouse_pos);
-            
+        {       
             // level buttons
             std::for_each_n(buttons_for_levels.begin(), current_level_index,
                 [&mouse_pos](auto& single_button)
@@ -297,7 +340,13 @@ void Game::render()
             single_button->draw(window);
         }
     }
-    else if (state == Game_state::Game)
+    /*
+    else if (state == Game_state::Settings)
+    {
+
+    }
+    */
+    else if (state == Game_state::Game || state == Game_state::Count_down)
     {
         for (auto& it : balls)
         {
@@ -314,9 +363,63 @@ void Game::render()
         timer->draw(window);
 
         sc->draw(window);
+
+        if (state == Game_state::Count_down)
+        {
+            for (const auto& single_button : buttons_count_down_numbers)
+            {
+                single_button->draw(window);
+            }
+        }
     }
     
     window->display();
+}
+
+void Game::count_down_level()
+{
+    for (int i = 0; i < count_down_seconds; i++)
+    {
+        for (int j = 0; j < count_down_seconds; j++)
+        {
+            if (i == j)
+            {
+                buttons_count_down_numbers.at(j)->get_caption_text()->set_color(sf::Color::Red);
+            }
+            else
+            {
+                buttons_count_down_numbers.at(j)->get_caption_text()->set_color(sf::Color::Black);
+            }
+        }
+
+        render();
+        util::my_sleep(1000);
+    }
+
+    // empty queque of events happend in count down state
+    while (window->pollEvent(e)) {}
+
+    state = Game_state::Game;
+}
+
+void Game::run_level(const int index)
+{
+    clear_level();
+    selected_level_index = index;
+
+    float temp;
+    Level::load_level(level_paths.at(selected_level_index), balls, temp);
+    timer->set_time(temp);
+    sc->set_value(Value_type::level, selected_level_index + 1);
+    
+    state = Game_state::Count_down;
+    count_down_level();
+}
+
+void Game::resume_level()
+{
+    state = Game_state::Count_down;
+    count_down_level();
 }
 
 void Game::clear_level()
@@ -324,39 +427,27 @@ void Game::clear_level()
     // reset player position
     p->set_pos_x(settings::SCREEN_WIDTH / 2 - p->get_tex().getSize().x / 2);
     p->set_pos_y(settings::SCREEN_HEIGHT - p->get_tex().getSize().y);
-    
+
     // clear balls content
     std::for_each(balls.begin(), balls.end(),
-        [](auto &it)
+        [](auto& it)
         {
             delete it;
         }
     );
     balls.clear();
-    
+
     // clear bullets content
     std::for_each(bullets.begin(), bullets.end(),
-        [](auto &it)
+        [](auto& it)
         {
             delete it;
         }
     );
     bullets.clear();
-    
+
     // reset timer
     timer->reset();
-}
-
-void Game::run_level(const int index)
-{
-    clear_level();
-
-    float temp;
-    Level::load_level(level_paths.at(index), balls, temp);
-    timer->set_time(temp);
-    sc->set_value(Value_type::level, current_level_index);
-    
-    state = Game_state::Game;
 }
 
 void Game::check_for_win()
@@ -364,7 +455,9 @@ void Game::check_for_win()
     if (balls.empty())
     {
         state = Game_state::Level;
-        if (current_level_index < level_count)
+        if (current_level_index < level_count &&
+            current_level_index - 1 == selected_level_index
+            )
         {
             current_level_index++;
         }
@@ -377,6 +470,9 @@ void Game::level_fail()
     
     if (lives == 1)
     {
+        // refresh last selected level button
+        buttons_for_levels.at(current_level_index - 1)->hover(sf::Vector2f(0.f, 0.f));
+
         clear_level();
         current_level_index = 1;
         lives = 3;

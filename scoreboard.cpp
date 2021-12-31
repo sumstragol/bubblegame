@@ -7,7 +7,7 @@ Scoreboard::Scoreboard()
         "Lives: 0"
     );
     sc_values.lives->get_caption_text()->set_font_size(30);
-    sc_values.lives->get_caption_text()->set_color(sf::Color::Red);
+    sc_values.lives->get_caption_text()->set_color(settings::FONT_COLOR);
     sc_values.lives->update_text_cor();
     
     sc_values.points = new Button(600, 34,
@@ -15,7 +15,7 @@ Scoreboard::Scoreboard()
         "Points: 0"
     );
     sc_values.points->get_caption_text()->set_font_size(30);
-    sc_values.points->get_caption_text()->set_color(sf::Color::Red);
+    sc_values.points->get_caption_text()->set_color(settings::FONT_COLOR);
     sc_values.points->update_text_cor();
     
     sc_values.level = new Button(600, 68,
@@ -23,7 +23,7 @@ Scoreboard::Scoreboard()
         "Level: 0"
     );
     sc_values.level->get_caption_text()->set_font_size(30);
-    sc_values.level->get_caption_text()->set_color(sf::Color::Red);
+    sc_values.level->get_caption_text()->set_color(settings::FONT_COLOR);
     sc_values.level->update_text_cor();
 }
 

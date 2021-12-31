@@ -2,8 +2,12 @@
 
 Player::Player()
 {
-    set_tex(settings::PLAYER_STAND_TEX_PATH);
-    attach_tex();
+    sprite_rect_right = sf::IntRect(0, 0, rect_cor.width, rect_cor.height);
+    sprite_rect_left = sf::IntRect(rect_cor.width * 3, 0, rect_cor.width, rect_cor.height);
+
+    set_tex(settings::PLAYER_TEX_PATH);
+
+    sprite = sf::Sprite(tex, sprite_rect_right);
 
     set_speed_x(settings::PLAYER_SPEED);
     set_speed_y(settings::PLAYER_SPEED);
@@ -12,8 +16,10 @@ Player::Player()
     set_pos_y(settings::SCREEN_HEIGHT - get_tex().getSize().y);
 }
 
-void Player::move(sf::RenderWindow *window, const Move_direction &d)
+void Player::move(sf::RenderWindow *window, const Move_direction &d, sf::Clock& c)
 {
+    update(d, c);
+    
     switch (d)
     {
         case Move_direction::left:
@@ -35,3 +41,42 @@ void Player::move(sf::RenderWindow *window, const Move_direction &d)
     }
 }
 
+void Player::update(const Move_direction& d, sf::Clock& c)
+{
+    if (c.getElapsedTime().asSeconds() > 0.3f)
+    {
+        switch (d)
+        {
+        case Move_direction::left:
+        {
+            if (sprite_rect_left.left == rect_cor.width * 5)
+            {
+                sprite_rect_left.left = rect_cor.width * 3;
+            }
+            else
+            {
+                sprite_rect_left.left += 142;
+            }
+
+            sprite.setTextureRect(sprite_rect_left);
+            break;
+        }
+        case Move_direction::right:
+        {
+            if (sprite_rect_right.left == rect_cor.width * 2)
+            {
+                sprite_rect_right.left = 0;
+            }
+            else
+            {
+                sprite_rect_right.left += 142;
+            }
+
+            sprite.setTextureRect(sprite_rect_right);
+            break;
+        }
+        }
+
+        c.restart();
+    }
+}

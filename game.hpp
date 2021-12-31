@@ -11,7 +11,8 @@
 
 enum class Game_state 
 {
-	Game, Menu, Pause, Level, Count_down
+	Game, Menu, Pause, Level, Count_down,
+    Settings
 };
 
 enum class Move_direction;
@@ -27,7 +28,9 @@ private:
 	void update();
 	void render();
 
+    void count_down_level();
     void run_level(const int index);
+    void resume_level();
     void clear_level();
     void check_for_win();
     void level_fail();
@@ -40,22 +43,26 @@ private:
 	Button* button_resume;
 	Button* button_settings;
 	Button* button_exit;
-    
+
+    static const unsigned int count_down_seconds = 3;
+    std::array<Button*, count_down_seconds> buttons_count_down_numbers;
+
     static const unsigned int level_count = 8;
     std::array<const std::string, level_count> level_paths = {
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level1.txt",
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level2.txt",
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level3.txt",
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level4.txt",
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level5.txt",
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level6.txt",
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level7.txt",
-        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level8.txt",
+        "levels/level1.txt",
+        "levels/level2.txt",
+        "levels/level3.txt",
+        "levels/level4.txt",
+        "levels/level5.txt",
+        "levels/level6.txt",
+        "levels/level7.txt",
+        "levels/level8.txt",
     };
     std::array<Button*, level_count> buttons_for_levels;
     
 	sf::RenderWindow* window;
 	sf::Event e;
+    sf::Clock clock;
 	std::vector<Ball*> balls;
 	Player* p;
 	std::vector<Bullet*> bullets;
@@ -65,4 +72,5 @@ private:
     unsigned int points;
     unsigned int lives;
     unsigned int current_level_index;
+    unsigned int selected_level_index;
 };
