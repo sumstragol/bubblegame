@@ -15,6 +15,7 @@ public:
     using Entity::set_pos_x;
     using Entity::set_pos_y;
     void move(sf::RenderWindow* window, const Move_direction &d, sf::Clock& c);
+    void refresh(const Move_direction& d);
 private:
     void update(const Move_direction& d, sf::Clock& c);
 

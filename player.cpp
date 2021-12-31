@@ -41,6 +41,25 @@ void Player::move(sf::RenderWindow *window, const Move_direction &d, sf::Clock& 
     }
 }
 
+void Player::refresh(const Move_direction& d)
+{
+    switch (d)
+    {
+    case Move_direction::left:
+    {
+        sprite_rect_left.left = rect_cor.width * 3;
+        sprite.setTextureRect(sprite_rect_left);
+        break;
+    }
+    case Move_direction::right:
+    {
+        sprite_rect_right.left = 0;
+        sprite.setTextureRect(sprite_rect_right);
+        break;
+    }
+    }
+}
+
 void Player::update(const Move_direction& d, sf::Clock& c)
 {
     if (c.getElapsedTime().asSeconds() > 0.3f)

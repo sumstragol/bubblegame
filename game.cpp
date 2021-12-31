@@ -121,6 +121,19 @@ void Game::poll_events()
             }
             
         }
+        case sf::Event::KeyReleased:
+        {
+            if (e.key.code == sf::Keyboard::A)
+            {
+                p->refresh(Move_direction::left);
+            }
+            if (e.key.code == sf::Keyboard::D)
+            {
+                p->refresh(Move_direction::right);
+            }
+
+            return;
+        }
         case sf::Event::MouseButtonPressed:
         {
             if (state == Game_state::Menu)
