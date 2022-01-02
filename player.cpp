@@ -7,13 +7,13 @@ Player::Player()
 
     set_tex(settings::PLAYER_TEX_PATH);
 
-    sprite = sf::Sprite(tex, sprite_rect_right);
+    sprite = sf::Sprite(tex, sprite_rect_left);
 
     set_speed_x(settings::PLAYER_SPEED);
     set_speed_y(settings::PLAYER_SPEED);
    
-    set_pos_x(settings::SCREEN_WIDTH / 2 - get_tex().getSize().x / 2);
-    set_pos_y(settings::SCREEN_HEIGHT - get_tex().getSize().y);
+    set_pos_x(0);
+    set_pos_y((float)(settings::SCREEN_HEIGHT - get_tex().getSize().y));
 }
 
 void Player::move(sf::RenderWindow *window, const Move_direction &d, sf::Clock& c)
@@ -60,6 +60,11 @@ void Player::refresh(const Move_direction& d)
     }
 }
 
+sprite_rect_cor Player::get_rect_cor() const
+{
+    return rect_cor;
+}
+
 void Player::update(const Move_direction& d, sf::Clock& c)
 {
     if (c.getElapsedTime().asSeconds() > 0.3f)
@@ -70,11 +75,11 @@ void Player::update(const Move_direction& d, sf::Clock& c)
         {
             if (sprite_rect_left.left == rect_cor.width * 5)
             {
-                sprite_rect_left.left = rect_cor.width * 3;
+                sprite_rect_left.left = rect_cor.width * 4;
             }
             else
             {
-                sprite_rect_left.left += 142;
+                sprite_rect_left.left += rect_cor.width;
             }
 
             sprite.setTextureRect(sprite_rect_left);
@@ -84,11 +89,11 @@ void Player::update(const Move_direction& d, sf::Clock& c)
         {
             if (sprite_rect_right.left == rect_cor.width * 2)
             {
-                sprite_rect_right.left = 0;
+                sprite_rect_right.left = rect_cor.width;
             }
             else
             {
-                sprite_rect_right.left += 142;
+                sprite_rect_right.left += rect_cor.width;
             }
 
             sprite.setTextureRect(sprite_rect_right);

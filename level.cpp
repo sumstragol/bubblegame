@@ -91,7 +91,7 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
 					return sf::Vector2f(0, 0);
 				}
 
-				return sf::Vector2f(std::stoi(tokens[0]), std::stoi(tokens[1]));
+				return sf::Vector2f(std::stof(tokens[0]), std::stof(tokens[1]));
 			}
 			catch (...)
 			{

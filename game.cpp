@@ -26,8 +26,8 @@ Game::Game()
     for (int i = 0; i < count_down_seconds; i++)
     {
         buttons_count_down_numbers.at(i) = new Button(
-            585 + i * 150,
-            400,
+            static_cast<float>(585 + i * 150),
+            400.0f,
             BUTTON_L_TEX_PATH,
             BUTTON_HOVER_L_TEX_PATH,
             std::to_string(count_down_seconds - i)
@@ -35,11 +35,11 @@ Game::Game()
     }
 
     // buttons for levels
-    for (int i = 0; i < level_paths.size(); i++)
+    for (size_t i = 0; i < level_paths.size(); i++)
     {
         buttons_for_levels.at(i) = new Button(
-            200 + i * 150,
-            400,
+            static_cast<float>(200 + i * 150),
+            400.0f,
             BUTTON_L_TEX_PATH,
             BUTTON_HOVER_L_TEX_PATH,
             std::to_string(i + 1)
@@ -322,8 +322,6 @@ void Game::update()
 
 void Game::render()
 {
-    window->clear();
-
     if (state == Game_state::Menu || state == Game_state::Pause)
     {
         window->clear(MENU_COLOR_BACKGROUND);
@@ -361,6 +359,8 @@ void Game::render()
     */
     else if (state == Game_state::Game || state == Game_state::Count_down)
     {
+        window->clear(GAME_COLOR_BACKGROUND);
+
         for (auto& it : balls)
         {
             it->draw(window);
@@ -438,8 +438,8 @@ void Game::resume_level()
 void Game::clear_level()
 {
     // reset player position
-    p->set_pos_x(settings::SCREEN_WIDTH / 2 - p->get_tex().getSize().x / 2);
-    p->set_pos_y(settings::SCREEN_HEIGHT - p->get_tex().getSize().y);
+    p->set_pos_x((float)(settings::SCREEN_WIDTH / 2 - p->get_rect_cor().width / 2));
+    p->set_pos_y((float)(settings::SCREEN_HEIGHT - p->get_tex().getSize().y));
 
     // clear balls content
     std::for_each(balls.begin(), balls.end(),

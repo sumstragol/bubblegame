@@ -2,7 +2,6 @@
 
 #include "includes.hpp"
 
-
 namespace settings
 {
     //window
@@ -13,6 +12,8 @@ namespace settings
     //state menu
     const sf::Color MENU_COLOR_BACKGROUND = sf::Color(132, 186, 154);
     const std::string LOGO_TEX = "textures/logo.png";
+    //state game
+    const sf::Color GAME_COLOR_BACKGROUND = sf::Color(211, 240, 222);
     //state pause
     //button
     const std::string BUTTON_TEX_PATH = "textures/button.png";
@@ -24,11 +25,9 @@ namespace settings
     const sf::Color BUTTON_HOVER_FONT_COLOR = sf::Color::White;
     //player
     const std::string PLAYER_TEX_PATH = "textures/player.png";
-    const int PLAYER_TEX_SIZE = 142;
-    const std::string PLAYER_STAND_TEX_PATH = "textures/player_stand.png";
-    const std::string PLAYER_MOVE_1_TEX_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/player_move_1.png";
-    const std::string PLAYER_MOVE_2_TEX_PATH = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/textures/player_move_2.png";
-    const float PLAYER_SPEED = 20.f;
+    const int PLAYER_TEX_SIZE_WIDTH = 90;
+    const int PLAYER_TEX_SIZE_HEIGHT = 140;
+    const float PLAYER_SPEED = 15.f;
     //ball
     const std::string BALL_TEX_PATH = "textures/ball.png";
     const float BALL_SCALE_LARGE = 3.f;
@@ -45,7 +44,7 @@ namespace settings
     const float BALL_MAX_GRAVITY_SMALL = 20.f;
     //bullet
     const std::string BULLET_TEX_PATH = "textures/ball.png";
-    const float BULLET_SPEED_LOW = 25.f;
+    const float BULLET_SPEED = 25.f;
     //scoreboard
     const std::string SCOREBOARD_TEX_PATH = "textures/scoreboard.png";
     const std::string FONT_PATH = "textures/uni0553-webfont.ttf";

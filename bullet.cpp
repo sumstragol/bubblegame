@@ -12,8 +12,8 @@ Bullet::Bullet(const sf::Vector2f& origin, const sf::Vector2f& direction)
 	util::direction_vector(temp, origin, direction);
 	util::normalize_vector(temp);
 
-	set_speed_x(-temp.x * settings::BULLET_SPEED_LOW);
-	set_speed_y(-temp.y * settings::BULLET_SPEED_LOW);
+	set_speed_x(-temp.x * settings::BULLET_SPEED);
+	set_speed_y(-temp.y * settings::BULLET_SPEED);
 }
 
 void Bullet::move(sf::RenderWindow* window, std::vector<Bullet*>& vec)
