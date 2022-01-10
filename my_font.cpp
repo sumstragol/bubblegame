@@ -21,9 +21,9 @@ void My_font::set_color(const sf::Color& new_color)
     text.setFillColor(font_color);
 }
 
-void My_font::set_position(const float &x_cor, const float &y_cor)
+void My_font::set_position(const int& cor_x, const int& cor_y)
 {
-    text.setPosition(x_cor, y_cor);
+    text.setPosition(cor_x, cor_y);
 }
 
 void My_font::set_font_size(const unsigned int &s)
