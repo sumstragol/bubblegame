@@ -23,6 +23,6 @@ public:
     static void load_stats(Container& data);
 private:
     enum class Key_Word { lives, points, level };
-    inline static const std::string data_file_path = "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/game_data/temp.txt";
+    inline static const std::string data_file_path = "game_data/temp.txt";
 };
 

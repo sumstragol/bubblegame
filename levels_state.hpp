@@ -5,8 +5,6 @@
 #include "button.hpp"
 #include "game_data.hpp"
 
-struct Game_Data;
-
 class Level_State : public State
 {
 public:
@@ -23,7 +21,7 @@ private:
     Button* left_arrow;
     Button* right_arrow;
     std::vector<Button*> buttons_levels;
-    std::vector<const std::string> levels_paths;
+    std::vector<std::string> levels_paths;
     
     unsigned int current_page;
     unsigned int max_pages;

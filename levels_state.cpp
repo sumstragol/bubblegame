@@ -15,26 +15,26 @@ Level_State::Level_State()
 
 void Level_State::init_levels_paths()
 {
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level1.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level2.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level3.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level4.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level5.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level6.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level7.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level8.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level9.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level10.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level11.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level12.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level13.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level14.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level15.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level16.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level17.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level18.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level19.txt");
-    this->levels_paths.push_back("/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level20.txt");
+    this->levels_paths.push_back("levels/level1.txt");
+    this->levels_paths.push_back("levels/level2.txt");
+    this->levels_paths.push_back("levels/level3.txt");
+    this->levels_paths.push_back("levels/level4.txt");
+    this->levels_paths.push_back("levels/level5.txt");
+    this->levels_paths.push_back("levels/level6.txt");
+    this->levels_paths.push_back("levels/level7.txt");
+    this->levels_paths.push_back("levels/level8.txt");
+    this->levels_paths.push_back("levels/level9.txt");
+    this->levels_paths.push_back("levels/level10.txt");
+    this->levels_paths.push_back("levels/level11.txt");
+    this->levels_paths.push_back("levels/level12.txt");
+    this->levels_paths.push_back("levels/level13.txt");
+    this->levels_paths.push_back("levels/level14.txt");
+    this->levels_paths.push_back("levels/level15.txt");
+    this->levels_paths.push_back("levels/level16.txt");
+    this->levels_paths.push_back("levels/level17.txt");
+    this->levels_paths.push_back("levels/level18.txt");
+    this->levels_paths.push_back("levels/level19.txt");
+    this->levels_paths.push_back("levels/level20.txt");
 
     //
     //this->levels_paths.push_back(sciezka);

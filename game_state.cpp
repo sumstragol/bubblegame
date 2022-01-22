@@ -35,10 +35,9 @@ void Game_State::init_game_objects(const std::string& level_path)
     
     timer = new Timer(0.f);
     float tempt;
-    int temp_level_index;
-    Level::load_level(level_path, balls, tempt, temp_level_index);
+    Level::load_level(level_path, balls, tempt, this->current_level_index);
     
-    this->sc->set_value(Value_type::level, temp_level_index);
+    this->sc->set_value(Value_type::level, this->current_level_index);
     
     
     timer->set_time(tempt);
@@ -203,17 +202,24 @@ void Game_State::restart_level()
         other_requested_state = new Menu_State();
         quit();
     }
-    
-    util::my_sleep(1000);
+ 
     clear();
     init_game_objects(this->init_level_path);
+
+    util::my_sleep(1000);
 }
 
 void Game_State::finish_level()
 {
     util::my_sleep(1000);
-    this->data.level++;
-    Game_Data::load_stats(data);
+    std::cout << init_data.level << " ";
+    std::cout << this->current_level_index << "\n";
+    if (init_data.level == this->current_level_index)
+    {
+        this->data.level++;
+        Game_Data::load_stats(data);
+    }
+
     other_requested_state = new Level_State();
     quit();
 }

@@ -30,6 +30,7 @@ private:
     Container data;
     Container init_data {0, 0, 0};
     std::string init_level_path;
+    int current_level_index;
     
     Player* p;
     std::vector<Ball*> balls;
