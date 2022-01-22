@@ -212,8 +212,6 @@ void Game_State::restart_level()
 void Game_State::finish_level()
 {
     util::my_sleep(1000);
-    std::cout << init_data.level << " ";
-    std::cout << this->current_level_index << "\n";
     if (init_data.level == this->current_level_index)
     {
         this->data.level++;
