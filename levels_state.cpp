@@ -35,9 +35,6 @@ void Level_State::init_levels_paths()
     this->levels_paths.push_back("levels/level18.txt");
     this->levels_paths.push_back("levels/level19.txt");
     this->levels_paths.push_back("levels/level20.txt");
-
-    //
-    //this->levels_paths.push_back(sciezka);
 }
 
 void Level_State::init_buttons()
