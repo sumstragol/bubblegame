@@ -16,8 +16,10 @@ public:
     void draw(sf::RenderWindow* window) const;
     bool got_hit(const sf::Sprite &other) const;
 protected:
+    // sets the member value
     void set_tex(const std::string& path);
     void set_tex(const sf::Texture& t);
+    // attaching member texture to a sprite
     void attach_tex();
     void set_pos_x(const float& value);
     void set_pos_y(const float& value);

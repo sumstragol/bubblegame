@@ -35,6 +35,12 @@ Button::Button(
 
 }
 
+Button::~Button()
+{
+    delete cap.regular;
+    delete cap.hover;
+}
+
 void Button::draw(sf::RenderWindow *window) const
 {
     window->draw(sprite);

@@ -19,11 +19,14 @@ public:
            const std::string& tex_path, const std::string& hover_tex_path,
            const std::string& button_text
     );
+    ~Button();
     
     void draw(sf::RenderWindow* window) const;
 	const sf::Texture get_tex(const Button_tex_type& type) const;
     
+    // changing button properties if given positions is located in buttons sprite texture
 	void hover(const sf::Vector2f& pos);
+    // returns if the mouses cursor is placed on the button
 	bool is_hovering() const;
     My_font* get_caption_text(const Button_tex_type& type = Button_tex_type::regular);
     void update_text_cor(const Button_tex_type& type = Button_tex_type::regular);

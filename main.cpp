@@ -1,9 +1,8 @@
-#include "game.hpp"
+#include "ggame.hpp"
 
 int main()
 {
-	Game g;
-	g.run();
-
-	return 0;
+    GGame g;
+    g.run();
+    return 0;
 }

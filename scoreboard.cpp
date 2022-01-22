@@ -27,6 +27,13 @@ Scoreboard::Scoreboard()
     sc_values.level->update_text_cor();
 }
 
+Scoreboard::~Scoreboard()
+{
+    delete sc_values.lives;
+    delete sc_values.points;
+    delete sc_values.level;
+}
+
 void Scoreboard::draw(sf::RenderWindow *window)
 {
     sc_values.lives->draw(window);

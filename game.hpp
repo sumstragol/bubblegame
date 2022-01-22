@@ -49,14 +49,14 @@ private:
 
     static const unsigned int level_count = 8;
     std::array<const std::string, level_count> level_paths = {
-        "levels/level1.txt",
-        "levels/level2.txt",
-        "levels/level3.txt",
-        "levels/level4.txt",
-        "levels/level5.txt",
-        "levels/level6.txt",
-        "levels/level7.txt",
-        "levels/level8.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level1.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level2.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level3.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level4.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level5.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level6.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level7.txt",
+        "/Users/mikolajbrozek/xcode projects/bubblef/bubblef/levels/level8.txt",
     };
     std::array<Button*, level_count> buttons_for_levels;
     
