@@ -1,0 +1,6 @@
+lives
+10
+points
+45
+level
+2
