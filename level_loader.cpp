@@ -59,7 +59,7 @@ void Level::load_level(const std::string& path, std::vector<Ball*>& balls, float
         catch (...)
         {
             std::cout << "Bad attempt converting line: " << single_line <<
-                " into a int\n";
+                " into a float\n";
 
             return 0.8f;
         }
